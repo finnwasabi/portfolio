@@ -41,8 +41,10 @@ const tools = skills.map((s) => {
             <path d={t.icon.path} />
           </svg>
         ) : (
-          <span class="grid size-5 shrink-0 place-items-center font-mono text-[13px] text-muted">
-            {"{ }"}
+          <span
+            class="grid size-5 shrink-0 place-items-center font-mono text-[15px] leading-none whitespace-nowrap text-muted"
+          >
+            {"{}"}
           </span>
         )}
         <span class="text-sm">{t.name}</span>

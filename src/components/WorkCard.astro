@@ -20,7 +20,7 @@ const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
 
 <a
   href={`/work/${entry.id}/`}
-  class="group spotlight reveal relative block overflow-hidden rounded-2xl border border-border bg-surface transition-colors duration-300 hover:border-brass/70"
+  class="group reveal relative block overflow-hidden rounded-2xl border border-border bg-surface transition-colors duration-300 hover:border-brass/70"
   style={`transition-delay: ${index * 70}ms`}
 >
   <div class="relative aspect-16/10 overflow-hidden bg-surface-2">
@@ -61,35 +61,21 @@ const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
 
     <p class="mt-2.5 text-sm leading-relaxed text-muted">{summary}</p>
 
-    <div class="mt-5 flex flex-wrap items-center gap-x-2 gap-y-2">
+    <div class="mt-5 flex flex-wrap items-center gap-2">
       {
         stack.map((s) => (
-          <span class="rounded-full border border-border px-2.5 py-0.5 font-mono text-[10px] tracking-wide text-muted">
+          <span class="rounded-full border border-border px-2.5 py-0.5 font-mono text-[11px] tracking-wide text-muted">
             {s}
           </span>
         ))
       }
-      <span class="eyebrow ml-auto">
-        {client}
-        {teamSize ? ` · ${teamSize} people` : ""}
-      </span>
     </div>
+
+    <!-- Own line, left aligned: pushed to the right it collided with the chips
+         as soon as they wrapped on a narrow screen -->
+    <p class="eyebrow mt-4">
+      {client}
+      {teamSize ? ` · ${teamSize} people` : ""}
+    </p>
   </div>
 </a>
-
-<script>
-  // One listener for the whole page rather than one per card.
-  if (matchMedia("(hover: hover)").matches) {
-    document.addEventListener(
-      "mousemove",
-      (e) => {
-        const card = (e.target as HTMLElement).closest<HTMLElement>(".spotlight");
-        if (!card) return;
-        const r = card.getBoundingClientRect();
-        card.style.setProperty("--mx", `${e.clientX - r.left}px`);
-        card.style.setProperty("--my", `${e.clientY - r.top}px`);
-      },
-      { passive: true },
-    );
-  }
-</script>

@@ -12,12 +12,13 @@
   --surface-2: #ebe6db;
   --border: #ded7c8;
   --text: #171221;
-  --muted: #6b6178;
+  --muted: #5d5468;
   --brass: #8a5a12;
   --brass-bright: #b8801f;
   --plum: #8e3b6b;
   --grid: rgba(23, 18, 33, 0.07);
-  --spot: 9%;
+  --line: rgba(23, 18, 33, 0.11);
+  --node: rgba(138, 90, 18, 0.5);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -32,7 +33,8 @@
     --brass-bright: #edbb5e;
     --plum: #c96aa0;
     --grid: rgba(243, 239, 231, 0.06);
-    --spot: 18%;
+    --line: rgba(243, 239, 231, 0.10);
+    --node: rgba(217, 164, 65, 0.45);
   }
 }
 
@@ -47,7 +49,8 @@
   --brass-bright: #edbb5e;
   --plum: #c96aa0;
   --grid: rgba(243, 239, 231, 0.06);
-  --spot: 18%;
+  --line: rgba(243, 239, 231, 0.10);
+  --node: rgba(217, 164, 65, 0.45);
 }
 
 @theme inline {
@@ -88,9 +91,9 @@ body {
    interface vocabulary matches the subject: a developer reading a spec. */
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -154,9 +157,9 @@ html.js .reveal.is-in {
 }
 .prose h2 {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--brass);
   margin: 3rem 0 1rem;
@@ -188,24 +191,51 @@ html.js .reveal.is-in {
   font-weight: 600;
 }
 
-/* Spotlight that follows the pointer across a card. The position comes from
-   two custom properties the script updates, so no layout work per frame. */
-.spotlight::after {
-  content: "";
-  position: absolute;
+/* A grid that only exists where the pointer is. Two layers: fine lines for texture
+   and a heavier dot where lines cross, both revealed through a mask that follows
+   the cursor. Nothing animates on scroll, only two custom properties change. */
+.surface-grid {
+  position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.35s ease;
-  background: radial-gradient(
-    14rem circle at var(--mx, 50%) var(--my, 50%),
-    color-mix(in oklab, var(--brass) var(--spot, 10%), transparent),
-    transparent 66%
+  transition: opacity 0.5s ease;
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px),
+    radial-gradient(circle at 1px 1px, var(--node) 2.5px, transparent 0);
+  background-size:
+    38px 38px,
+    38px 38px,
+    38px 38px;
+  -webkit-mask-image: radial-gradient(
+    18rem circle at var(--mx, -100%) var(--my, -100%),
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 42%,
+    transparent 72%
+  );
+  mask-image: radial-gradient(
+    18rem circle at var(--mx, -100%) var(--my, -100%),
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 42%,
+    transparent 72%
   );
 }
-@media (hover: hover) {
-  .spotlight:hover::after {
-    opacity: 1;
+.surface-grid.is-live {
+  opacity: 1;
+}
+
+/* Content sits one level above the grid layer */
+body > header,
+body > main,
+body > footer {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surface-grid {
+    display: none;
   }
 }
