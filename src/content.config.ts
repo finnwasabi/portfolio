@@ -13,7 +13,7 @@ const work = defineCollection({
     summary: z.string(),
     stack: z.array(z.string()),
     teamSize: z.number().optional(),
-    href: z.string().url().optional(),
+    href: z.url().optional(),
     // Set to false while a case study is still being written
     published: z.boolean().default(true),
   }),
