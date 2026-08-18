@@ -1,0 +1,211 @@
+@import "tailwindcss";
+
+@import "@fontsource-variable/syne";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+
+/* Brass on deep ink, with plum as the second voice. Chosen over the obvious
+   terracotta-on-cream: it reads as metal and pigment rather than pottery. */
+:root {
+  --bg: #f4f1ea;
+  --surface: #ffffff;
+  --surface-2: #ebe6db;
+  --border: #ded7c8;
+  --text: #171221;
+  --muted: #6b6178;
+  --brass: #8a5a12;
+  --brass-bright: #b8801f;
+  --plum: #8e3b6b;
+  --grid: rgba(23, 18, 33, 0.07);
+  --spot: 9%;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #120e1a;
+    --surface: #1b1526;
+    --surface-2: #221a2f;
+    --border: #2e2540;
+    --text: #f3efe7;
+    --muted: #9a8fa8;
+    --brass: #d9a441;
+    --brass-bright: #edbb5e;
+    --plum: #c96aa0;
+    --grid: rgba(243, 239, 231, 0.06);
+    --spot: 18%;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #120e1a;
+  --surface: #1b1526;
+  --surface-2: #221a2f;
+  --border: #2e2540;
+  --text: #f3efe7;
+  --muted: #9a8fa8;
+  --brass: #d9a441;
+  --brass-bright: #edbb5e;
+  --plum: #c96aa0;
+  --grid: rgba(243, 239, 231, 0.06);
+  --spot: 18%;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-brass: var(--brass);
+  --color-brass-bright: var(--brass-bright);
+  --color-plum: var(--plum);
+
+  --font-display: "Syne Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The canvas grid the hero sits on: the dotted backdrop of a design tool. */
+.canvas-grid {
+  background-image: radial-gradient(circle at 1px 1px, var(--grid) 1px, transparent 0);
+  background-size: 28px 28px;
+}
+
+/* Small caps label set in mono. Used for eyebrows and measurements so the
+   interface vocabulary matches the subject: a developer reading a spec. */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Sections start slightly low and faded, then settle once scrolled into view. */
+.reveal {
+  opacity: 1;
+}
+html.js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+html.js .reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero lines lift in one after another on first paint. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  html.js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .rise {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Case study body copy */
+.prose {
+  color: var(--text);
+  line-height: 1.75;
+  font-size: 1.0625rem;
+}
+.prose h2 {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin: 3rem 0 1rem;
+}
+.prose h2:first-child {
+  margin-top: 0;
+}
+.prose p {
+  margin: 0 0 1.25rem;
+  max-width: 62ch;
+}
+.prose p:last-child {
+  margin-bottom: 0;
+}
+.prose a {
+  color: var(--brass);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose ul {
+  margin: 0 0 1.25rem;
+  padding-left: 1.15rem;
+  list-style: disc;
+}
+.prose li {
+  margin-bottom: 0.4rem;
+}
+.prose strong {
+  font-weight: 600;
+}
+
+/* Spotlight that follows the pointer across a card. The position comes from
+   two custom properties the script updates, so no layout work per frame. */
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    14rem circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in oklab, var(--brass) var(--spot, 10%), transparent),
+    transparent 66%
+  );
+}
+@media (hover: hover) {
+  .spotlight:hover::after {
+    opacity: 1;
+  }
+}

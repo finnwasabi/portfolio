@@ -1,0 +1,95 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"work">;
+  index: number;
+}
+
+const { entry, index } = Astro.props;
+const { title, client, period, summary, stack, teamSize } = entry.data;
+
+// Screenshots are named after the entry id, so adding one is just dropping a
+// file in. Projects whose site is gone fall back to a typographic poster.
+const shots = import.meta.glob<{ default: ImageMetadata }>("/src/assets/work/*.png", {
+  eager: true,
+});
+const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
+---
+
+<a
+  href={`/work/${entry.id}/`}
+  class="group spotlight reveal relative block overflow-hidden rounded-2xl border border-border bg-surface transition-colors duration-300 hover:border-brass/70"
+  style={`transition-delay: ${index * 70}ms`}
+>
+  <div class="relative aspect-16/10 overflow-hidden bg-surface-2">
+    {
+      cover ? (
+        <Image
+          src={cover}
+          alt={`${title} interface`}
+          widths={[480, 800, 1200]}
+          sizes="(max-width: 768px) 100vw, 46vw"
+          class="size-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          loading={index < 2 ? "eager" : "lazy"}
+        />
+      ) : (
+        <div class="canvas-grid grid size-full place-items-center">
+          <span class="px-6 text-center font-display text-2xl font-bold tracking-tight text-muted/60">
+            {title}
+          </span>
+        </div>
+      )
+    }
+
+    <!-- Sits over the image, slides up on hover -->
+    <span
+      class="absolute right-3 bottom-3 translate-y-2 rounded-full bg-brass px-3 py-1 font-mono text-[10px] tracking-wider text-bg uppercase opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+    >
+      Read case study
+    </span>
+  </div>
+
+  <div class="p-6">
+    <div class="flex items-baseline justify-between gap-4">
+      <h3 class="font-display text-xl font-bold tracking-tight transition-colors group-hover:text-brass">
+        {title}
+      </h3>
+      <span class="eyebrow shrink-0">{period}</span>
+    </div>
+
+    <p class="mt-2.5 text-sm leading-relaxed text-muted">{summary}</p>
+
+    <div class="mt-5 flex flex-wrap items-center gap-x-2 gap-y-2">
+      {
+        stack.map((s) => (
+          <span class="rounded-full border border-border px-2.5 py-0.5 font-mono text-[10px] tracking-wide text-muted">
+            {s}
+          </span>
+        ))
+      }
+      <span class="eyebrow ml-auto">
+        {client}
+        {teamSize ? ` · ${teamSize} people` : ""}
+      </span>
+    </div>
+  </div>
+</a>
+
+<script>
+  // One listener for the whole page rather than one per card.
+  if (matchMedia("(hover: hover)").matches) {
+    document.addEventListener(
+      "mousemove",
+      (e) => {
+        const card = (e.target as HTMLElement).closest<HTMLElement>(".spotlight");
+        if (!card) return;
+        const r = card.getBoundingClientRect();
+        card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+        card.style.setProperty("--my", `${e.clientY - r.top}px`);
+      },
+      { passive: true },
+    );
+  }
+</script>

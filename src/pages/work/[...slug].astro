@@ -1,0 +1,144 @@
+---
+import { Image } from "astro:assets";
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { site } from "../../data/site";
+
+export async function getStaticPaths() {
+  const work = await getCollection("work", ({ data }) => data.published);
+  const sorted = work.sort((a, b) => a.data.order - b.data.order);
+
+  return sorted.map((entry, i) => ({
+    params: { slug: entry.id },
+    props: { entry, next: sorted[(i + 1) % sorted.length] },
+  }));
+}
+
+const { entry, next } = Astro.props;
+const { Content } = await render(entry);
+const { title, client, role, period, stack, teamSize, summary, href } = entry.data;
+
+const shots = import.meta.glob<{ default: ImageMetadata }>("/src/assets/work/*.png", {
+  eager: true,
+});
+const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
+
+const facts = [
+  ["Client", client],
+  ["Role", role],
+  ["Timeline", period],
+  teamSize ? ["Team", `${teamSize} people`] : null,
+].filter(Boolean) as [string, string][];
+---
+
+<Base title={title} description={summary}>
+  <article>
+    <header class="canvas-grid border-b border-border">
+      <div class="mx-auto max-w-5xl px-6 pt-12 pb-14">
+        <a href="/#work" class="eyebrow transition-colors hover:text-brass">← All work</a>
+
+        <h1
+          class="rise mt-6 pb-[0.06em] font-display text-[clamp(2.25rem,6vw,4rem)] leading-[1.05] font-extrabold tracking-[-0.03em]"
+        >
+          {title}
+        </h1>
+        <p class="rise mt-5 max-w-2xl text-lg leading-relaxed text-muted" style="animation-delay: 120ms">
+          {summary}
+        </p>
+
+        <dl class="mt-10 grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4">
+          {
+            facts.map(([k, v]) => (
+              <div>
+                <dt class="eyebrow">{k}</dt>
+                <dd class="mt-1.5 text-sm">{v}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </header>
+
+    {
+      cover && (
+        <div class="mx-auto max-w-5xl px-6">
+          <div class="reveal -mt-8 overflow-hidden rounded-2xl border border-border shadow-2xl shadow-black/20">
+            <Image
+              src={cover}
+              alt={`${title} interface`}
+              widths={[640, 1024, 1440]}
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              class="w-full"
+              loading="eager"
+            />
+          </div>
+        </div>
+      )
+    }
+
+    <div class="mx-auto max-w-5xl px-6 py-16">
+      <div class="prose reveal max-w-none">
+        <Content />
+      </div>
+
+      <div class="reveal mt-12 flex flex-wrap items-center gap-2">
+        {
+          stack.map((s) => (
+            <span class="rounded-full border border-border px-3 py-1 font-mono text-[11px] text-muted">
+              {s}
+            </span>
+          ))
+        }
+      </div>
+
+      {
+        href && (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener"
+            class="reveal mt-8 inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm transition hover:border-brass hover:text-brass"
+          >
+            Visit the site
+            <span aria-hidden="true">↗</span>
+          </a>
+        )
+      }
+    </div>
+
+    <!-- Next project keeps people moving through the work instead of bouncing -->
+    <nav class="border-t border-border">
+      <a
+        href={`/work/${next.id}/`}
+        class="group mx-auto flex max-w-5xl items-center justify-between gap-6 px-6 py-10"
+      >
+        <div>
+          <span class="eyebrow">Next project</span>
+          <p
+            class="mt-1.5 font-display text-2xl font-bold tracking-tight transition-colors group-hover:text-brass"
+          >
+            {next.data.title}
+          </p>
+        </div>
+        <span
+          class="text-2xl text-muted transition-transform group-hover:translate-x-1 group-hover:text-brass"
+          aria-hidden="true">→</span
+        >
+      </a>
+    </nav>
+
+    <section class="mx-auto max-w-5xl px-6 pt-4">
+      <div class="reveal rounded-3xl border border-border bg-surface p-10">
+        <h2 class="font-display text-2xl font-bold tracking-tight">Curious about the details?</h2>
+        <p class="mt-3 text-muted">Happy to talk through how any of this was built.</p>
+        <a
+          href={`mailto:${site.email}`}
+          class="mt-6 inline-flex items-center gap-2 rounded-full bg-brass px-5 py-2.5 text-sm font-medium text-bg transition hover:bg-brass-bright"
+        >
+          {site.email}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+  </article>
+</Base>

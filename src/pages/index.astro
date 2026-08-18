@@ -1,0 +1,122 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import Hero from "../components/Hero.astro";
+import WorkCard from "../components/WorkCard.astro";
+import { site, focus, skills, experience, education } from "../data/site";
+
+const work = (await getCollection("work", ({ data }) => data.published)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Base>
+  <Hero />
+
+  <!-- What I work on -->
+  <section class="mx-auto max-w-5xl px-6 py-20">
+    <h2 class="eyebrow reveal">What I work on</h2>
+    <div class="mt-8 grid gap-10 sm:grid-cols-3">
+      {
+        focus.map((f, i) => (
+          <div class="reveal" style={`transition-delay: ${i * 90}ms`}>
+            <h3 class="font-display text-lg font-bold tracking-tight">{f.title}</h3>
+            <div class="mt-3 h-px w-10 bg-brass" />
+            <p class="mt-3 text-sm leading-relaxed text-muted">{f.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Work -->
+  <section id="work" class="mx-auto max-w-5xl px-6 py-12">
+    <div class="reveal flex items-baseline justify-between">
+      <h2 class="eyebrow">Selected work</h2>
+      <span class="eyebrow">{work.length} projects</span>
+    </div>
+
+    <div class="mt-8 grid gap-6 md:grid-cols-2">
+      {work.map((entry, i) => <WorkCard entry={entry} index={i} />)}
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section id="about" class="mx-auto max-w-5xl px-6 py-20">
+    <h2 class="eyebrow reveal">Experience</h2>
+
+    <div class="mt-8 grid gap-10">
+      {
+        experience.map((job, i) => (
+          <div
+            class="reveal grid gap-3 border-t border-border pt-6 sm:grid-cols-[11rem_1fr] sm:gap-8"
+            style={`transition-delay: ${i * 90}ms`}
+          >
+            <div>
+              <p class="eyebrow">{job.period}</p>
+              <h3 class="mt-1.5 font-display text-lg font-bold tracking-tight">{job.company}</h3>
+              <p class="text-sm text-muted">{job.role}</p>
+            </div>
+            <ul class="grid gap-2 text-sm leading-relaxed text-muted">
+              {job.points.map((p) => (
+                <li class="relative pl-5 before:absolute before:top-2.5 before:left-0 before:h-px before:w-3 before:bg-brass">
+                  {p}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+
+      <div class="reveal grid gap-3 border-t border-border pt-6 sm:grid-cols-[11rem_1fr] sm:gap-8">
+        <div>
+          <p class="eyebrow">{education.period}</p>
+          <h3 class="mt-1.5 font-display text-lg font-bold tracking-tight">Education</h3>
+        </div>
+        <div class="text-sm leading-relaxed text-muted">
+          <p class="text-text">{education.school}</p>
+          <p class="mt-1">{education.major}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal mt-16">
+      <h2 class="eyebrow">Tools</h2>
+      <div class="mt-5 flex flex-wrap gap-2">
+        {
+          skills.map((s) => (
+            <span class="rounded-full border border-border bg-surface px-3 py-1.5 font-mono text-xs text-muted transition-colors hover:border-brass hover:text-brass">
+              {s}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="mx-auto max-w-5xl px-6 pb-8">
+    <div
+      class="reveal canvas-grid relative overflow-hidden rounded-3xl border border-border bg-surface p-10 sm:p-14"
+    >
+      <div
+        class="pointer-events-none absolute -right-24 -bottom-28 size-72 rounded-full opacity-50 blur-[80px]"
+        style="background: radial-gradient(circle, color-mix(in oklab, var(--plum) 40%, transparent), transparent 70%)"
+      >
+      </div>
+
+      <h2 class="font-display text-3xl font-extrabold tracking-tight sm:text-4xl">Get in touch</h2>
+      <p class="mt-4 max-w-md leading-relaxed text-muted">
+        Questions about anything here, or just want to talk shop about front-end work? Write to me. I
+        reply to everything, usually within a day.
+      </p>
+      <a
+        href={`mailto:${site.email}`}
+        class="mt-7 inline-flex items-center gap-2 rounded-full bg-brass px-5 py-2.5 text-sm font-medium text-bg transition hover:bg-brass-bright"
+      >
+        {site.email}
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+</Base>
