@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 import { getCollection, render } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import { site } from "../../data/site";
@@ -23,6 +23,12 @@ const shots = import.meta.glob<{ default: ImageMetadata }>("/src/assets/work/*.p
 });
 const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
 
+// Link previews expect 1.91:1. Feeding them the raw 16:10 screenshot means the top
+// and bottom get cropped off, and it ships ~900KB for a thumbnail.
+const preview = cover
+  ? await getImage({ src: cover, width: 1200, height: 630, fit: "cover", position: "top", format: "jpeg", quality: 82 })
+  : undefined;
+
 const facts = [
   ["Client", client],
   ["Role", role],
@@ -31,7 +37,7 @@ const facts = [
 ].filter(Boolean) as [string, string][];
 ---
 
-<Base title={title} description={summary}>
+<Base title={title} description={summary} image={preview?.src} type="article">
   <article>
     <header class="canvas-grid border-b border-border">
       <div class="mx-auto max-w-5xl px-6 pt-12 pb-14">

@@ -5,11 +5,16 @@ import { site } from "../data/site";
 interface Props {
   title?: string;
   description?: string;
+  /** Absolute or site-relative image for link previews. Falls back to the site card. */
+  image?: string;
+  /** Case studies are articles; the home page is a website */
+  type?: "website" | "article";
 }
 
-const { title, description = site.intro } = Astro.props;
+const { title, description = site.metaDescription, image = "/og.png", type = "website" } = Astro.props;
 const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.role}`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
+const preview = new URL(image, site.url).href;
 ---
 
 <!doctype html>
@@ -21,12 +26,24 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_GB" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={preview} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name}, ${site.role}`} />
+
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={preview} />
+
     <meta name="theme-color" content="#120e1a" />
+    <meta name="author" content={site.name} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
@@ -35,6 +52,22 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
       const saved = localStorage.getItem("theme");
       if (saved) document.documentElement.dataset.theme = saved;
     </script>
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: site.name,
+        url: site.url,
+        image: preview,
+        jobTitle: site.role,
+        email: `mailto:${site.email}`,
+        address: { "@type": "PostalAddress", addressLocality: "Ho Chi Minh City", addressCountry: "VN" },
+        sameAs: site.socials.map((s) => s.href),
+        knowsAbout: ["Front-end development", "React", "Next.js", "Design systems", "Web performance"],
+      })}
+    />
   </head>
 
   <body>

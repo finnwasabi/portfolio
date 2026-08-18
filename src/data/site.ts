@@ -13,6 +13,9 @@ export const site = {
     { label: "LinkedIn", href: "https://www.linkedin.com/in/lenhattung/" },
     { label: "Facebook", href: "https://www.facebook.com/finn1511" },
   ],
+  // Search results cut off around 155 characters; the long intro is for the page itself
+  metaDescription:
+    "Front-end developer in Ho Chi Minh City. Four and a half years building production interfaces with React, Next.js and Refine, plus seven Strapi plugins on npm.",
   intro:
     "I build web interfaces that hold up in production. Four and a half years spent turning Figma files into fast, accessible, maintainable front-ends for booking platforms, e-commerce and enterprise products.",
 };
