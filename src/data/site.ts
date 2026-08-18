@@ -9,7 +9,7 @@ export const site = {
   // scraped within days and those two fields are what scammers actually want.
   email: "nhattung1511@gmail.com",
   socials: [
-    { label: "GitHub", href: "https://github.com/tunglenhat" },
+    { label: "GitHub", href: "https://github.com/finnwasabi" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/lenhattung/" },
     { label: "Facebook", href: "https://www.facebook.com/finn1511" },
   ],
