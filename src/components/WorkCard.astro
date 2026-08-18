@@ -20,7 +20,7 @@ const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
 
 <a
   href={`/work/${entry.id}/`}
-  class="group reveal relative block overflow-hidden rounded-2xl border border-border bg-surface transition-colors duration-300 hover:border-brass/70"
+  class="group reveal @container relative block overflow-hidden rounded-2xl border border-border bg-surface transition-colors duration-300 hover:border-brass/70"
   style={`transition-delay: ${index * 70}ms`}
 >
   <div class="relative aspect-16/10 overflow-hidden bg-surface-2">
@@ -52,30 +52,35 @@ const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
   </div>
 
   <div class="p-6">
-    <div class="flex items-baseline justify-between gap-4">
+    <!-- Stacked while the card is narrow so the title owns its line; one row once
+         the card itself is wide enough for the date to sit opposite it. -->
+    <div class="flex flex-col gap-1 @[24rem]:flex-row @[24rem]:items-baseline @[24rem]:justify-between @[24rem]:gap-4">
       <h3 class="font-display text-xl font-bold tracking-tight transition-colors group-hover:text-brass">
         {title}
       </h3>
-      <span class="eyebrow shrink-0">{period}</span>
+      <span class="eyebrow @[24rem]:shrink-0">{period}</span>
     </div>
 
-    <p class="mt-2.5 text-sm leading-relaxed text-muted">{summary}</p>
+    <p class="mt-3 text-sm leading-relaxed text-muted">{summary}</p>
 
-    <div class="mt-5 flex flex-wrap items-center gap-2">
-      {
-        stack.map((s) => (
-          <span class="rounded-full border border-border px-2.5 py-0.5 font-mono text-[11px] tracking-wide text-muted">
-            {s}
-          </span>
-        ))
-      }
+    <div
+      class="mt-5 flex flex-col gap-4 @[27rem]:flex-row @[27rem]:flex-wrap @[27rem]:items-center @[27rem]:gap-x-3 @[27rem]:gap-y-2"
+    >
+      <div class="flex flex-wrap gap-2">
+        {
+          stack.map((s) => (
+            <span class="rounded-full border border-border px-2.5 py-0.5 font-mono text-[11px] tracking-wide text-muted">
+              {s}
+            </span>
+          ))
+        }
+      </div>
+
+      <!-- Left aligned in a narrow card, opposite the chips once there is room -->
+      <span class="eyebrow @[27rem]:ml-auto">
+        {client}
+        {teamSize ? ` · ${teamSize} people` : ""}
+      </span>
     </div>
-
-    <!-- Own line, left aligned: pushed to the right it collided with the chips
-         as soon as they wrapped on a narrow screen -->
-    <p class="eyebrow mt-4">
-      {client}
-      {teamSize ? ` · ${teamSize} people` : ""}
-    </p>
   </div>
 </a>
