@@ -32,21 +32,34 @@ export const focus = [
   },
 ];
 
-export const skills = [
-  "TypeScript",
-  "React",
-  "Next.js",
-  "Vite",
-  "Tailwind CSS",
-  "Sass",
-  "Ant Design",
-  "Storybook",
-  "Strapi",
-  "REST APIs",
-  "Node.js",
-  "MongoDB",
-  "Git",
+export const skills: { name: string; icon?: string }[] = [
+  { name: "TypeScript", icon: "typescript" },
+  { name: "React", icon: "react" },
+  { name: "Next.js", icon: "nextdotjs" },
+  { name: "Vite", icon: "vite" },
+  { name: "Tailwind CSS", icon: "tailwindcss" },
+  { name: "Sass", icon: "sass" },
+  { name: "Ant Design", icon: "antdesign" },
+  { name: "Storybook", icon: "storybook" },
+  { name: "Strapi", icon: "strapi" },
+  { name: "Node.js", icon: "nodedotjs" },
+  { name: "MongoDB", icon: "mongodb" },
+  { name: "Git", icon: "git" },
+  { name: "REST APIs" },
 ];
+
+// Running my own server is where I learn the things a ticket never teaches.
+// Deliberately vague about hostnames: this is a story, not an invitation.
+export const homelab = {
+  title: "Outside the browser",
+  body: "I run my own server, and most of what I know about the layer under the front-end I learned by breaking it. Thirteen containers behind a reverse proxy, network-wide ad filtering, uptime monitoring that pings my phone, an intrusion filter that once banned me from my own machine, and a Telegram bot to run the whole thing from bed.",
+  stats: [
+    ["13", "containers"],
+    ["24/7", "uptime monitored"],
+    ["35%", "of DNS queries blocked"],
+    ["0", "clicks to deploy"],
+  ] as [string, string][],
+};
 
 export const experience = [
   {

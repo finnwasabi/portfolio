@@ -1,0 +1,46 @@
+---
+interface Props {
+  items: string[];
+}
+const { items } = Astro.props;
+// The list is rendered twice so the second copy slides in as the first leaves
+const loop = [...items, ...items];
+---
+
+<div class="marquee border-y border-border py-5" aria-hidden="true">
+  <div class="marquee-track">
+    {
+      loop.map((item) => (
+        <span class="flex items-center gap-8 pr-8 font-display text-2xl font-extrabold tracking-tight whitespace-nowrap sm:text-3xl">
+          {item}
+          <span class="text-brass">✳</span>
+        </span>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .marquee {
+    overflow: hidden;
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: slide 38s linear infinite;
+  }
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+  @keyframes slide {
+    to {
+      /* Half, because the track holds two copies of the list */
+      transform: translateX(-50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
+</style>

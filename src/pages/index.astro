@@ -3,7 +3,9 @@ import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import Hero from "../components/Hero.astro";
 import WorkCard from "../components/WorkCard.astro";
-import { site, focus, skills, experience, education } from "../data/site";
+import Toolbox from "../components/Toolbox.astro";
+import Marquee from "../components/Marquee.astro";
+import { site, focus, experience, education, homelab } from "../data/site";
 
 const work = (await getCollection("work", ({ data }) => data.published)).sort(
   (a, b) => a.data.order - b.data.order,
@@ -12,6 +14,10 @@ const work = (await getCollection("work", ({ data }) => data.published)).sort(
 
 <Base>
   <Hero />
+
+  <Marquee
+    items={["Front-end", "Interfaces", "Design systems", "Performance", "Accessibility"]}
+  />
 
   <!-- What I work on -->
   <section class="mx-auto max-w-5xl px-6 py-20">
@@ -80,17 +86,32 @@ const work = (await getCollection("work", ({ data }) => data.published)).sort(
       </div>
     </div>
 
-    <div class="reveal mt-16">
-      <h2 class="eyebrow">Tools</h2>
-      <div class="mt-5 flex flex-wrap gap-2">
+    <div class="mt-16">
+      <h2 class="eyebrow reveal">Tools</h2>
+      <div class="mt-5">
+        <Toolbox />
+      </div>
+    </div>
+  </section>
+
+  <!-- Outside work -->
+  <section class="mx-auto max-w-5xl px-6 py-12">
+    <div class="reveal rounded-2xl border border-border bg-surface p-8 sm:p-10">
+      <h2 class="eyebrow">{homelab.title}</h2>
+      <p class="mt-4 max-w-2xl leading-relaxed text-muted">{homelab.body}</p>
+
+      <dl class="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-4">
         {
-          skills.map((s) => (
-            <span class="rounded-full border border-border bg-surface px-3 py-1.5 font-mono text-xs text-muted transition-colors hover:border-brass hover:text-brass">
-              {s}
-            </span>
+          homelab.stats.map(([value, label]) => (
+            <div>
+              <dt class="font-display text-2xl font-extrabold tracking-tight text-brass">
+                {value}
+              </dt>
+              <dd class="mt-1 text-xs text-muted">{label}</dd>
+            </div>
           ))
         }
-      </div>
+      </dl>
     </div>
   </section>
 

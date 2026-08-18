@@ -1,0 +1,49 @@
+---
+import * as si from "simple-icons";
+import { skills } from "../data/site";
+
+// Logos come from simple-icons at build time and are inlined as SVG paths, so the
+// page still makes zero external requests.
+const iconFor = (slug?: string) => {
+  if (!slug) return null;
+  const key = "si" + slug.charAt(0).toUpperCase() + slug.slice(1);
+  return (si as Record<string, { path: string; hex: string; title: string }>)[key] ?? null;
+};
+
+const tools = skills.map((s) => ({ ...s, icon: iconFor(s.icon) }));
+---
+
+<div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+  {
+    tools.map((t, i) => (
+      <div
+        class="reveal group flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3 transition-colors hover:border-brass/60"
+        style={`transition-delay: ${i * 35}ms`}
+      >
+        {t.icon ? (
+          <svg
+            class="size-5 shrink-0 fill-muted transition-colors duration-300"
+            viewBox="0 0 24 24"
+            role="img"
+            aria-hidden="true"
+            style={`--brand: #${t.icon.hex}`}
+          >
+            <path d={t.icon.path} />
+          </svg>
+        ) : (
+          <span class="grid size-5 shrink-0 place-items-center font-mono text-[13px] text-muted">
+            {"{ }"}
+          </span>
+        )}
+        <span class="text-sm">{t.name}</span>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  /* Grey by default so the grid reads as one block, brand colour on hover */
+  .group:hover svg {
+    fill: var(--brand);
+  }
+</style>
