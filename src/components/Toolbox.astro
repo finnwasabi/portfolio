@@ -10,7 +10,17 @@ const iconFor = (slug?: string) => {
   return (si as Record<string, { path: string; hex: string; title: string }>)[key] ?? null;
 };
 
-const tools = skills.map((s) => ({ ...s, icon: iconFor(s.icon) }));
+// Next.js, shadcn/ui and Directus all ship near-black logos, which disappear on a
+// dark background. Anything this dark falls back to the page's own text colour.
+const isTooDark = (hex: string) => {
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b < 0.22;
+};
+
+const tools = skills.map((s) => {
+  const icon = iconFor(s.icon);
+  return { ...s, icon, brand: icon && !isTooDark(icon.hex) ? `#${icon.hex}` : "var(--text)" };
+});
 ---
 
 <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
@@ -26,7 +36,7 @@ const tools = skills.map((s) => ({ ...s, icon: iconFor(s.icon) }));
             viewBox="0 0 24 24"
             role="img"
             aria-hidden="true"
-            style={`--brand: #${t.icon.hex}`}
+            style={`--brand: ${t.brand}`}
           >
             <path d={t.icon.path} />
           </svg>
