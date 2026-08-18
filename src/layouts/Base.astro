@@ -120,34 +120,49 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
     </script>
 
     <script>
-      // Sections settle in as they come into view. Anything already at or above
-      // the fold is shown immediately: with a #hash link the browser jumps first,
-      // and elements scrolled past never intersect, so they would stay invisible.
-      const items = document.querySelectorAll(".reveal");
-      if (items.length) {
+      // Sections settle in as they come into view. Two safety nets, because a
+      // section that never shows up is far worse than one that animates late:
+      //   1. anything at or above the fold on load is shown immediately, so a
+      //      #hash link that jumps down the page does not strand what it skipped;
+      //   2. a scroll pass catches elements the observer missed when the page is
+      //      scrolled faster than it can report intersections.
+      const items = new Set(document.querySelectorAll(".reveal"));
+      if (items.size) {
+        const show = (el) => {
+          el.classList.add("is-in");
+          items.delete(el);
+          io.unobserve(el);
+        };
+
         const io = new IntersectionObserver(
           (entries) => {
-            for (const e of entries) {
-              if (!e.isIntersecting) continue;
-              e.target.classList.add("is-in");
-              io.unobserve(e.target);
-            }
+            for (const e of entries) if (e.isIntersecting) show(e.target);
           },
           { rootMargin: "0px 0px -8% 0px", threshold: 0.06 },
         );
 
-        const settle = () => {
-          items.forEach((el) => {
-            if (el.getBoundingClientRect().top < window.innerHeight) {
-              el.classList.add("is-in");
-            } else {
-              io.observe(el);
-            }
+        const sweep = () => {
+          for (const el of items) {
+            if (el.getBoundingClientRect().top < window.innerHeight) show(el);
+          }
+        };
+
+        let queued = false;
+        const onScroll = () => {
+          if (queued) return;
+          queued = true;
+          requestAnimationFrame(() => {
+            queued = false;
+            sweep();
+            if (!items.size) window.removeEventListener("scroll", onScroll);
           });
         };
 
-        // After layout, so the jump to a hash target has already happened
-        requestAnimationFrame(settle);
+        requestAnimationFrame(() => {
+          sweep();
+          items.forEach((el) => io.observe(el));
+          window.addEventListener("scroll", onScroll, { passive: true });
+        });
       }
     </script>
   </body>

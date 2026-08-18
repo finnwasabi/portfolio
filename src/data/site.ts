@@ -63,6 +63,39 @@ export const homelab = {
   ] as [string, string][],
 };
 
+// Strapi plugins published to npm under the @tunghtml scope. Download counts are
+// fetched at build time, so the page never calls npm in the browser.
+export const packages = [
+  {
+    name: "composite-field",
+    blurb: "Builds a display value out of several text fields, and keeps manual edits safe.",
+  },
+  {
+    name: "section-divider",
+    blurb: "Breaks a long content-type form into readable groups.",
+  },
+  {
+    name: "multiselect-checkbox",
+    blurb: "Multi-select that stores a JSON array instead of a comma-separated string.",
+  },
+  {
+    name: "filtered-relation",
+    blurb: "Filtered relation field with dynamic placeholders and inline status changes.",
+  },
+  {
+    name: "export-import-clsx",
+    blurb: "Content export and import with Excel support and filtering.",
+  },
+  {
+    name: "dynamic-enum",
+    blurb: "Enum field editors can extend themselves, without waiting on a schema change.",
+  },
+  {
+    name: "time-slot-picker",
+    blurb: "Picks time slots across several dates.",
+  },
+];
+
 export const experience = [
   {
     company: "GEEK Up",
