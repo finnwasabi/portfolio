@@ -108,7 +108,7 @@ export const experience = [
   {
     company: "GEEK Up",
     role: "Front-end Developer",
-    period: "Mar 2025 — Present",
+    period: "Mar 2025 - Present",
     points: [
       "Front-end delivery at a product partner that takes clients from strategy and design through to shipped software, across finance, healthcare and enterprise operations.",
       "Shipped two products for one of Vietnam's largest brokerages: its bilingual public site, editable end to end by the communications team, and the platform behind its annual investment conference, where I also rebuilt the meeting-matching engine on the back end.",
@@ -120,7 +120,7 @@ export const experience = [
   {
     company: "Wiicamp",
     role: "Front-end Developer",
-    period: "Jul 2022 — Mar 2025",
+    period: "Jul 2022 - Mar 2025",
     points: [
       "Worked alongside UI/UX designers to implement interface components from Figma.",
       "Applied SEO techniques that improved search visibility for client sites.",
@@ -131,7 +131,7 @@ export const experience = [
   {
     company: "Tie Commerce",
     role: "Graphic Designer",
-    period: "Nov 2020 — Jun 2022",
+    period: "Nov 2020 - Jun 2022",
     points: [
       "Print-on-demand design: artwork for apparel and merchandise sold through international marketplaces.",
       "The press sets the constraints, not the screen. Resolution, colour separation and the printable area decide what a design can be before taste gets a say, and a file that ignores them comes back as a refund rather than a revision.",
@@ -146,11 +146,11 @@ export const education = [
   {
     school: "Duy Tan University",
     major: "Bachelor's degree, Computer Science",
-    period: "2019 — Jul 2021",
+    period: "2019 - Jul 2021",
   },
   {
     school: "Da Nang University of Science and Technology",
     major: "Mechatronics Engineering",
-    period: "2017 — 2019",
+    period: "2017 - 2019",
   },
 ];

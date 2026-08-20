@@ -2,7 +2,7 @@
 title: "Bookese"
 client: "Vietnam"
 role: "Front-end Developer"
-period: "Jul 2022 — Mar 2025"
+period: "Jul 2022 - Mar 2025"
 order: 3
 summary: "An accommodation booking platform in the mould of Agoda and Booking.com, where guests search, compare and book stays."
 stack: ["React", "REST APIs", "Sass"]

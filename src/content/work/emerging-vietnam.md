@@ -2,7 +2,7 @@
 title: "Emerging Vietnam"
 client: "Top brokerage, Vietnam"
 role: "Front-end Developer"
-period: "Oct 2025 — Jun 2026"
+period: "Oct 2025 - Jun 2026"
 order: 1
 summary: "Registration and operations platform for an international investment conference, from sign-up through automated meeting scheduling to check-in on the day."
 stack: ["Next.js", "Strapi", "PostgreSQL", "Redis"]

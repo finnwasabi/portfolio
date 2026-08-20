@@ -2,7 +2,7 @@
 title: "Wiicamp Check-in"
 client: "Vietnam"
 role: "Front-end Developer"
-period: "Jan 2024 — Mar 2024"
+period: "Jan 2024 - Mar 2024"
 order: 11
 summary: "Internal attendance system built into the company site, so staff check in and event organisers see the room fill up."
 stack: ["Next.js", "Dashboards", "Responsive"]

@@ -2,7 +2,7 @@
 title: "Chiic House"
 client: "Vietnam"
 role: "Front-end Developer"
-period: "Apr 2024 — Jul 2024"
+period: "Apr 2024 - Jul 2024"
 order: 6
 summary: "Booking platform for a hotel chain with branches across the country, where rates are published openly and availability moves while you are looking at it."
 stack: ["Next.js", "SSR", "SEO"]

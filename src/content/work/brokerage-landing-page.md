@@ -2,7 +2,7 @@
 title: "Brokerage Landing Page"
 client: "Top brokerage, Vietnam"
 role: "Front-end Developer"
-period: "Sep 2025 — Nov 2025"
+period: "Sep 2025 - Nov 2025"
 order: 2
 summary: "Public-facing site for a listed brokerage, bilingual, where every page is assembled from CMS sections instead of being built by a developer."
 stack: ["Next.js", "TypeScript", "Strapi", "i18n"]
