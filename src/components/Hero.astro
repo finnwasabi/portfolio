@@ -1,6 +1,7 @@
 ---
 import { site, skills } from "../data/site";
 
+// Shown while nothing is hovered.
 const specs: [string, string][] = [
   ["Role", "Front-end"],
   ["Based", "Ho Chi Minh City"],
@@ -8,6 +9,11 @@ const specs: [string, string][] = [
   ["Core", skills.slice(0, 3).map((s) => s.name).join(", ")],
   ["Reply", "Within a day"],
 ];
+
+// Each layer carries four fixed properties; the panel appends measured size as
+// the fifth, so both states are the same height and the panel never jumps.
+const layerProps = (pairs: [string, string][]) =>
+  pairs.map(([k, v]) => `${k}:${v}`).join("|");
 ---
 
 <section class="canvas-grid relative overflow-x-clip border-b border-border">
@@ -40,27 +46,49 @@ const specs: [string, string][] = [
         class="eyebrow rise flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2"
         style="animation-delay: 120ms"
         data-layer="Eyebrow"
+        data-props={layerProps([
+          ["Font", "JetBrains Mono"],
+          ["Size", "12px"],
+          ["Tracking", "0.12em"],
+          ["Case", "Uppercase"],
+        ])}
       >
         <span>{site.role}</span>
         <span aria-hidden="true" class="hidden sm:inline">·</span>
         <span>{site.location}</span>
       </p>
 
-      <!-- Full width so the name stays on one line for as long as it fits -->
-      <h1
-        class="rise mt-5 pb-[0.06em] font-display text-[clamp(2.75rem,8vw,5.5rem)] leading-[1.02] font-extrabold tracking-[-0.03em]"
-        style="animation-delay: 200ms"
-        data-layer="Name"
-      >
-        Le Nhat Tung
-      </h1>
+      <!-- The name keeps the full 976px so it stays on one line, and it never
+           needs more than 708px of that, which leaves the panel its column. -->
+      <div class="relative mt-5">
+        <!-- w-fit shrinks the box to the glyphs, so the inspector outline hugs
+             the name instead of running under the panel beside it -->
+        <h1
+          class="rise w-fit pb-[0.06em] font-display text-[clamp(2.75rem,8vw,5.5rem)] leading-[1.02] font-extrabold tracking-[-0.03em]"
+          style="animation-delay: 200ms"
+          data-layer="Name"
+          data-props={layerProps([
+            ["Font", "Unbounded"],
+            ["Weight", "800"],
+            ["Tracking", "-0.03em"],
+            ["Leading", "1.02"],
+          ])}
+        >
+          Le Nhat Tung
+        </h1>
 
-      <div class="lg:grid lg:grid-cols-[1fr_15rem] lg:items-start lg:gap-14">
-        <div>
+        <!-- Right padding is the panel's column, kept clear from lg up -->
+        <div class="lg:pr-[17rem]">
           <p
             class="rise mt-8 text-lg leading-relaxed text-muted"
             style="animation-delay: 300ms"
             data-layer="Intro"
+            data-props={layerProps([
+              ["Font", "Inter"],
+              ["Size", "18px"],
+              ["Leading", "1.625"],
+              ["Fill", "Muted"],
+            ])}
           >
             {site.intro}
           </p>
@@ -70,6 +98,12 @@ const specs: [string, string][] = [
               href="#work"
               class="group inline-flex items-center gap-2 rounded-full bg-brass px-5 py-2.5 text-sm font-medium text-bg transition hover:bg-brass-bright"
               data-layer="Button / Primary"
+              data-props={layerProps([
+                ["Fill", "Brass"],
+                ["Radius", "Full"],
+                ["Label", "14px"],
+                ["Action", "Scroll to work"],
+              ])}
             >
               See the work
               <span class="transition-transform group-hover:translate-y-0.5">↓</span>
@@ -78,19 +112,28 @@ const specs: [string, string][] = [
               href={`mailto:${site.email}`}
               class="rounded-full border border-border px-5 py-2.5 text-sm font-medium transition hover:border-brass hover:text-brass"
               data-layer="Button / Secondary"
+              data-props={layerProps([
+                ["Stroke", "1px border"],
+                ["Radius", "Full"],
+                ["Label", "14px"],
+                ["Action", "Open mail"],
+              ])}
             >
               Get in touch
             </a>
           </div>
         </div>
 
-        <!-- Properties panel, the counterpart to the layer inspector -->
+        <!-- The counterpart to the layer inspector: sits vertically centred on
+             the whole name-to-buttons block, and swaps to whichever layer the
+             pointer is over. Hidden on touch, where nothing can be hovered. -->
         <aside
-          class="rise mt-12 hidden rounded-xl border border-border bg-surface/60 p-5 backdrop-blur-sm lg:mt-9 lg:block"
+          id="props"
+          class="rise hidden rounded-xl border border-border bg-surface/60 p-5 backdrop-blur-sm lg:absolute lg:top-1/2 lg:right-0 lg:block lg:w-60 lg:-translate-y-1/2"
           style="animation-delay: 460ms"
         >
-          <p class="eyebrow border-b border-border pb-3">Properties</p>
-          <dl class="mt-3.5 grid gap-3">
+          <p class="eyebrow border-b border-border pb-3" id="props-title">Properties</p>
+          <dl class="mt-3.5 grid min-h-[8.5rem] auto-rows-min gap-3" id="props-list">
             {
               specs.map(([k, v]) => (
                 <div class="flex items-baseline justify-between gap-3">
@@ -128,11 +171,50 @@ const specs: [string, string][] = [
   // Touch devices have no hover, and a marker that never moves is just clutter.
   const canHover = matchMedia("(hover: hover)").matches;
 
+  // The properties panel reads whichever layer the pointer is over, and falls
+  // back to the standing set the moment it leaves.
+  const list = document.getElementById("props-list");
+  const title = document.getElementById("props-title");
+  const restingRows = list?.innerHTML ?? "";
+  const restingTitle = title?.textContent ?? "";
+  let shownLayer = "";
+
+  const row = (k: string, v: string) =>
+    `<div class="flex items-baseline justify-between gap-3"><dt class="font-mono text-[11px] text-muted">${k}</dt><dd class="text-right text-[13px]">${v}</dd></div>`;
+
+  const showLayer = (el: HTMLElement, w: number, h: number) => {
+    if (!list || !title) return;
+    const raw = el.dataset.props;
+    const name = el.dataset.layer ?? "";
+    if (!raw) return;
+    // Size changes as the window resizes, so redraw when either part changes
+    const key = `${name}|${Math.round(w)}x${Math.round(h)}`;
+    if (key === shownLayer) return;
+    shownLayer = key;
+    title.textContent = name;
+    list.innerHTML =
+      raw
+        .split("|")
+        .map((pair) => {
+          const at = pair.indexOf(":");
+          return row(pair.slice(0, at), pair.slice(at + 1));
+        })
+        .join("") + row("Size", `${Math.round(w)} × ${Math.round(h)}`);
+  };
+
+  const showResting = () => {
+    if (!list || !title || !shownLayer) return;
+    shownLayer = "";
+    title.textContent = restingTitle;
+    list.innerHTML = restingRows;
+  };
+
   if (artboard && marker && label && canHover) {
     artboard.addEventListener("mousemove", (e) => {
       const target = (e.target as HTMLElement).closest<HTMLElement>("[data-layer]");
       if (!target) {
         marker.classList.add("hidden");
+        showResting();
         return;
       }
       const t = target.getBoundingClientRect();
@@ -142,9 +224,13 @@ const specs: [string, string][] = [
       marker.style.height = `${t.height + 8}px`;
       label.textContent = `${target.dataset.layer}  ${Math.round(t.width)}×${Math.round(t.height)}`;
       marker.classList.remove("hidden");
+      showLayer(target, t.width, t.height);
     });
 
-    artboard.addEventListener("mouseleave", () => marker.classList.add("hidden"));
+    artboard.addEventListener("mouseleave", () => {
+      marker.classList.add("hidden");
+      showResting();
+    });
   }
 
   if (glow && !still && canHover) {
