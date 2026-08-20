@@ -101,7 +101,9 @@ const work = (await getCollection("work", ({ data }) => data.published)).sort(
   <section class="mx-auto max-w-5xl px-6 py-12">
     <div class="reveal rounded-2xl border border-border bg-surface p-8 sm:p-10">
       <h2 class="eyebrow">{homelab.title}</h2>
-      <p class="mt-4 max-w-2xl leading-relaxed text-muted">{homelab.body}</p>
+      <!-- Runs the full width of the card on purpose, so the paragraph and the
+           stats row below it share one edge instead of ending 300px apart. -->
+      <p class="mt-4 leading-relaxed text-muted">{homelab.body}</p>
 
       <dl class="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-4">
         {
@@ -130,7 +132,7 @@ const work = (await getCollection("work", ({ data }) => data.published)).sort(
       </div>
 
       <h2 class="font-display text-3xl font-extrabold tracking-tight sm:text-4xl">Get in touch</h2>
-      <p class="mt-4 max-w-md leading-relaxed text-muted">
+      <p class="mt-4 leading-relaxed text-muted">
         Questions about anything here, or just want to talk shop about front-end work? Write to me. I
         reply to everything, usually within a day.
       </p>
