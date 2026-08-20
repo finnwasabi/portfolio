@@ -167,9 +167,12 @@ html.js .reveal.is-in {
 .prose h2:first-child {
   margin-top: 0;
 }
+/* Body copy runs the full column, same as every other paragraph on the site.
+   Long lines need the extra leading to stay trackable, hence 1.9 here against
+   the 1.75 the rest of .prose uses. */
 .prose p {
   margin: 0 0 1.25rem;
-  max-width: 62ch;
+  line-height: 1.9;
 }
 .prose p:last-child {
   margin-bottom: 0;
