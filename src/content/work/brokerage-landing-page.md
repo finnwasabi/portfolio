@@ -1,6 +1,6 @@
 ---
-title: "HSC Landing Page"
-client: "HSC, Vietnam"
+title: "Brokerage Landing Page"
+client: "Top brokerage, Vietnam"
 role: "Front-end Developer"
 period: "Sep 2025 — Nov 2025"
 order: 2
@@ -12,7 +12,7 @@ href: "https://www.hsc.com.vn"
 
 ## The problem
 
-This is the site HSC sends people to, not the platform they trade on. Which means it
+This is the site the firm sends people to, not the platform they trade on. Which means it
 changes constantly: campaigns, product pages, notices, dividend records, board
 changes, research notes. On the old site each of those went through a developer, so
 publishing anything took a release.

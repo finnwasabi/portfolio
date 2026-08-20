@@ -1,6 +1,6 @@
 ---
 title: "Emerging Vietnam"
-client: "HSC, Vietnam"
+client: "Top brokerage, Vietnam"
 role: "Front-end Developer"
 period: "Oct 2025 — Jun 2026"
 order: 1
@@ -12,7 +12,7 @@ href: "https://www.emergingvietnam.com.vn"
 
 ## The problem
 
-HSC's annual investment conference is a scheduling problem wearing a website. Hundreds of fund
+The firm's annual investment conference is a scheduling problem wearing a website. Hundreds of fund
 managers and listed companies register, each with a view on who is worth their time, and
 the organisers have to turn that into a grid of one-to-one meetings where nobody is in
 two rooms at once. Then everyone arrives on the same morning and has to be checked in
