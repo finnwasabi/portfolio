@@ -77,16 +77,23 @@ const work = (await getCollection("work", ({ data }) => data.published)).sort(
         ))
       }
 
-      <div class="reveal grid gap-3 border-t border-border pt-6 sm:grid-cols-[11rem_1fr] sm:gap-8">
-        <div>
-          <p class="eyebrow">{education.period}</p>
-          <h3 class="mt-1.5 font-display text-lg font-bold tracking-tight">Education</h3>
-        </div>
-        <div class="text-sm leading-relaxed text-muted">
-          <p class="text-text">{education.school}</p>
-          <p class="mt-1">{education.major}</p>
-        </div>
-      </div>
+      {
+        education.map((school, i) => (
+          <div class="reveal grid gap-3 border-t border-border pt-6 sm:grid-cols-[11rem_1fr] sm:gap-8">
+            <div>
+              <p class="eyebrow">{school.period}</p>
+              {/* The heading names the section once; the second entry just continues it */}
+              {i === 0 && (
+                <h3 class="mt-1.5 font-display text-lg font-bold tracking-tight">Education</h3>
+              )}
+            </div>
+            <div class="text-sm leading-relaxed text-muted">
+              <p class="text-text">{school.school}</p>
+              <p class="mt-1">{school.major}</p>
+            </div>
+          </div>
+        ))
+      }
     </div>
 
     <div class="mt-16">
