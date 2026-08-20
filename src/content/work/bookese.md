@@ -2,7 +2,7 @@
 title: "Bookese"
 client: "Vietnam"
 role: "Front-end Developer"
-period: "Jul 2022 — Present"
+period: "Jul 2022 — Mar 2025"
 order: 3
 summary: "An accommodation booking platform in the mould of Agoda and Booking.com, where guests search, compare and book stays."
 stack: ["React", "REST APIs", "Sass"]
@@ -29,5 +29,5 @@ returning an hour later with a stale price.
 
 ## Result
 
-A booking flow that eight people could keep working on at once, still in production and
-still being extended today.
+A booking flow that eight people could keep working on at once. I was on it for the
+whole of my time at the company, and it is still in production and still growing.

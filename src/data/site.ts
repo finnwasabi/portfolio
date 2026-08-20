@@ -15,9 +15,9 @@ export const site = {
   ],
   // Search results cut off around 155 characters; the long intro is for the page itself
   metaDescription:
-    "Front-end developer in Ho Chi Minh City. Three years building production interfaces with React, Next.js and Refine, plus seven Strapi plugins on npm.",
+    "Front-end developer in Ho Chi Minh City. Four years building production interfaces with React, Next.js and Refine, plus seven Strapi plugins on npm.",
   intro:
-    "I build web interfaces that hold up in production. Three years spent turning Figma files into fast, accessible, maintainable front-ends for booking platforms, e-commerce and enterprise products.",
+    "I build web interfaces that hold up in production. Four years spent turning Figma files into fast, accessible, maintainable front-ends for booking platforms, e-commerce and enterprise products.",
 };
 
 export const focus = [
@@ -120,7 +120,7 @@ export const experience = [
   {
     company: "Wiicamp",
     role: "Front-end Developer",
-    period: "Apr 2023 — Mar 2025",
+    period: "Jul 2022 — Mar 2025",
     points: [
       "Worked alongside UI/UX designers to implement interface components from Figma.",
       "Applied SEO techniques that improved search visibility for client sites.",
@@ -131,7 +131,7 @@ export const experience = [
   {
     company: "Tie Commerce",
     role: "Graphic Designer",
-    period: "Jan 2022 — May 2023",
+    period: "Aug 2021 — Jun 2022",
     points: [
       "Produced visual assets for marketing and product campaigns, working to an existing brand system.",
       "Prepared artwork for both print and screen, which meant learning where a layout breaks before it ships.",
@@ -145,11 +145,11 @@ export const education = [
   {
     school: "Duy Tan University",
     major: "Bachelor's degree, Computer Science",
-    period: "2019 — 2023",
+    period: "2019 — Jul 2021",
   },
   {
     school: "Da Nang University of Science and Technology",
-    major: "Electronics and Telecommunication",
+    major: "Mechatronics Engineering",
     period: "2017 — 2019",
   },
 ];
