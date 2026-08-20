@@ -85,11 +85,12 @@ const preview = new URL(image, site.url).href;
           LNT<span class="text-brass">.</span>
         </a>
 
-        <div class="flex items-center gap-6 text-sm">
+        <!-- Three links fit on a 320px screen with the gap tightened, so they all
+             stay visible. A hamburger would hide the whole nav behind a tap to
+             save room that is not needed. -->
+        <div class="flex items-center gap-4 text-sm sm:gap-6">
           <a href="/#work" class="text-muted transition-colors hover:text-text">Work</a>
-          <a href="/#about" class="hidden text-muted transition-colors hover:text-text sm:inline"
-            >About</a
-          >
+          <a href="/#about" class="text-muted transition-colors hover:text-text">About</a>
           <a href="/#contact" class="text-muted transition-colors hover:text-text">Contact</a>
 
           <button

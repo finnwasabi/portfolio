@@ -34,8 +34,16 @@ const specs: [string, string][] = [
         </svg>
       </span>
 
-      <p class="eyebrow rise" style="animation-delay: 120ms" data-layer="Eyebrow">
-        {site.role} · {site.location}
+      <!-- Two lines on a phone. The separator dot only earns its place once the
+           two halves actually share a line. -->
+      <p
+        class="eyebrow rise flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2"
+        style="animation-delay: 120ms"
+        data-layer="Eyebrow"
+      >
+        <span>{site.role}</span>
+        <span aria-hidden="true" class="hidden sm:inline">·</span>
+        <span>{site.location}</span>
       </p>
 
       <!-- Full width so the name stays on one line for as long as it fits -->
