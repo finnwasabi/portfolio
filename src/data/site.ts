@@ -133,8 +133,9 @@ export const experience = [
     role: "Graphic Designer",
     period: "Nov 2020 — Jun 2022",
     points: [
-      "Produced visual assets for marketing and product campaigns, working to an existing brand system.",
-      "Prepared artwork for both print and screen, which meant learning where a layout breaks before it ships.",
+      "Print-on-demand design: artwork for apparel and merchandise sold through international marketplaces.",
+      "The press sets the constraints, not the screen. Resolution, colour separation and the printable area decide what a design can be before taste gets a say, and a file that ignores them comes back as a refund rather than a revision.",
+      "Worked in a small design team and took briefs straight from clients at home and overseas, which is where I learned to ask what a request is for before opening the file.",
       "This is where the eye came from. Spacing, hierarchy and type were the job before they were the tooling. The last eight months of it ran alongside my final year at university.",
     ],
   },
