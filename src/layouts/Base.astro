@@ -186,7 +186,7 @@ const preview = new URL(image, site.url).href;
       //      scrolled faster than it can report intersections.
       const items = new Set(document.querySelectorAll(".reveal"));
       if (items.size) {
-        const show = (el) => {
+        const show = (el: Element) => {
           el.classList.add("is-in");
           items.delete(el);
           io.unobserve(el);

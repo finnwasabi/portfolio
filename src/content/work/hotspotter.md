@@ -3,7 +3,7 @@ title: "Hotspotter"
 client: "Netherlands"
 role: "Front-end Developer"
 period: "Jul 2022 — Feb 2024"
-order: 2
+order: 4
 summary: "Marketing site for a mobile app that helps people find notable places, keep lists of favourites and review venues."
 stack: ["Next.js", "SSR", "SEO"]
 teamSize: 4

@@ -3,7 +3,7 @@ title: "MuaThep"
 client: "Vietnam"
 role: "Front-end Developer"
 period: "Jan 2023 — May 2023"
-order: 4
+order: 6
 summary: "A live steel-price database where buyers track daily price movement and request quotes."
 stack: ["React", "Charts", "REST APIs"]
 teamSize: 4

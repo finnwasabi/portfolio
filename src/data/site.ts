@@ -111,6 +111,7 @@ export const experience = [
     period: "Mar 2025 — Present",
     points: [
       "Front-end delivery at a product partner that takes clients from strategy and design through to shipped software, across finance, healthcare and enterprise operations.",
+      "Shipped two platforms for a listed securities firm: a bilingual corporate and investor relations site, and a conference platform where I also rebuilt the meeting-matching engine on the back end.",
       "Wrote the front-end standards and quality gates now used as the baseline on client projects.",
       "Built and maintained a shared component library documented in Storybook so parallel teams ship consistent UI.",
       "Reviewed designs before implementation to surface missing states and edge cases while they were still cheap to fix.",

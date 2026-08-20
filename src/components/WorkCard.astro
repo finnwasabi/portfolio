@@ -76,10 +76,12 @@ const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
         }
       </div>
 
-      <!-- Left aligned in a narrow card, opposite the chips once there is room -->
+      <!-- Left aligned in a narrow card, opposite the chips once there is room.
+           The count stays glued to its unit so a wrap never strands "4" from
+           "people" on the next line. -->
       <span class="eyebrow @[27rem]:ml-auto">
         {client}
-        {teamSize ? ` · ${teamSize} people` : ""}
+        {teamSize ? <span class="whitespace-nowrap">{` · ${teamSize} people`}</span> : ""}
       </span>
     </div>
   </div>

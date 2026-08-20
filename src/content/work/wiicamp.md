@@ -3,7 +3,7 @@ title: "Wiicamp Company Website"
 client: "Vietnam"
 role: "Front-end Developer"
 period: "Nov 2023 — Mar 2025"
-order: 5
+order: 7
 summary: "Corporate site presenting the company to prospective clients, built to read well on a phone and a desktop alike."
 stack: ["JavaScript", "jQuery", "Responsive"]
 teamSize: 3
