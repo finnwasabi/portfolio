@@ -131,11 +131,11 @@ export const experience = [
   {
     company: "Tie Commerce",
     role: "Graphic Designer",
-    period: "Aug 2021 — Jun 2022",
+    period: "Nov 2020 — Jun 2022",
     points: [
       "Produced visual assets for marketing and product campaigns, working to an existing brand system.",
       "Prepared artwork for both print and screen, which meant learning where a layout breaks before it ships.",
-      "This is where the eye came from. Spacing, hierarchy and type were the job before they were the tooling.",
+      "This is where the eye came from. Spacing, hierarchy and type were the job before they were the tooling. The last eight months of it ran alongside my final year at university.",
     ],
   },
 ];
