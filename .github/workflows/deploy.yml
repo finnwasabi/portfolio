@@ -3,6 +3,11 @@ name: Deploy
 on:
   push:
     branches: [main]
+  # npm download counts are read at build time, so a daily rebuild keeps them
+  # from going stale without putting a fetch in the visitor's browser. An odd
+  # minute avoids the crowd that schedules on the hour.
+  schedule:
+    - cron: "17 2 * * *"
   workflow_dispatch:
 
 # A second push while one deploy is mid-flight would race the rsync
