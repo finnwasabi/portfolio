@@ -47,6 +47,15 @@ const preview = new URL(image, site.url).href;
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
+    <!-- CANH BAO: noi dung script nay duoc bam va ghim vao Content-Security-Policy
+         trong Caddyfile tren may chu (khoi tungln.is-a.dev). Sua mot ky tu la ma bam
+         doi, va trinh duyet se lang le tu choi chay no: giao dien sang toi thoi nho
+         lua chon, khong bao gi trong console. Buoc "Check the inline script hash" trong
+         .github/workflows/deploy.yml se chan viec do va in ra ma bam moi.
+
+         Van phai de is:inline: no can chay TRUOC khi trang ve lan dau, neu khong nguoi
+         dung da chon nen toi se thay mot nhay nen sang. Moi script khac trong trang deu
+         da duoc day ra file ngoai de CSP chi can script-src 'self'. -->
     <script is:inline>
       document.documentElement.classList.add("js");
       const saved = localStorage.getItem("theme");
@@ -143,7 +152,10 @@ const preview = new URL(image, site.url).href;
       </div>
     </footer>
 
-    <script is:inline>
+    <!-- Khong dung is:inline: script nay chi gan mot event listener, chay sau khi
+         DOM san sang la du. De Astro dong goi ra file ngoai thi Content-Security-Policy
+         chi can script-src 'self', khong phai bam noi dung. -->
+    <script>
       const root = document.documentElement;
       document.getElementById("theme-toggle")?.addEventListener("click", () => {
         const current =

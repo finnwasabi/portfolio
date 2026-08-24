@@ -34,6 +34,48 @@ jobs:
       - name: Build
         run: npm run build
 
+      # The Caddyfile on the server pins this hash in its Content-Security-Policy.
+      # Editing the theme-init script in Base.astro changes the hash, and the browser
+      # would then silently refuse to run it: dark mode would stop remembering itself
+      # with nothing in the console to say why. Catch it here instead, where it is loud.
+      - name: Check the inline script hash still matches the CSP
+        run: |
+          node --input-type=module -e '
+            import { readFileSync, readdirSync, statSync } from "node:fs";
+            import { createHash } from "node:crypto";
+            import { join } from "node:path";
+
+            const EXPECTED = "sha256-MWuTONv5iCEDd0eDtv7rkRfwsZv2U6fTo++HXsKah4c=";
+
+            const walk = (d) => readdirSync(d).flatMap((f) => {
+              const p = join(d, f);
+              return statSync(p).isDirectory() ? walk(p) : p.endsWith(".html") ? [p] : [];
+            });
+
+            const found = new Set();
+            for (const file of walk("dist")) {
+              const html = readFileSync(file, "utf8");
+              for (const m of html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)) {
+                if (!m[2].trim()) continue;
+                if (m[1].includes("application/ld+json")) continue;
+                found.add("sha256-" + createHash("sha256").update(m[2]).digest("base64"));
+              }
+            }
+
+            const list = [...found];
+            if (list.length === 1 && list[0] === EXPECTED) {
+              console.log("Inline script hash unchanged.");
+              process.exit(0);
+            }
+            console.error("The inline scripts no longer match the CSP on the server.");
+            console.error("Expected exactly one block:", EXPECTED);
+            console.error("Built instead:", list.length ? list.join("\n  ") : "(none)");
+            console.error("");
+            console.error("Update script-src in the tungln.is-a.dev block of the server");
+            console.error("Caddyfile, and the EXPECTED value in this workflow, then retry.");
+            process.exit(1);
+          '
+
       - name: Authorise SSH
         run: |
           mkdir -p ~/.ssh
