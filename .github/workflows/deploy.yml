@@ -83,13 +83,44 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           printf '%s\n' "${{ secrets.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
 
+      # Port 22 is closed at the cloud firewall to everything but two known
+      # addresses, and a runner is neither: it gets a fresh Azure address every
+      # run. So the runner joins the server's WireGuard network and reaches it
+      # on the private address instead. The config routes only the server, so
+      # nothing else about the runner's networking changes.
+      - name: Join the server's private network
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq wireguard-tools
+          printf '%s\n' "${{ secrets.WG_CONFIG }}" | sudo tee /etc/wireguard/wg0.conf > /dev/null
+          sudo chmod 600 /etc/wireguard/wg0.conf
+          sudo wg-quick up wg0
+          # The handshake takes a moment, and rsync failing on the first packet
+          # would look like a broken key rather than a cold tunnel.
+          for i in $(seq 1 15); do
+            if timeout 3 bash -c 'cat < /dev/null > /dev/tcp/10.0.0.81/22' 2>/dev/null; then
+              echo "Reached the server on attempt $i."
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "The tunnel came up but the server never answered on port 22."
+          sudo wg show
+          exit 1
+
       # The key is restricted server-side by rrsync to write-only access to the
       # portfolio directory, so the path here is relative to that directory.
       - name: Upload to server
-        run: rsync -az --delete dist/ ${{ secrets.DEPLOY_TARGET }}:./
+        run: rsync -az --delete dist/ ${{ secrets.DEPLOY_TARGET_VPN }}:./
 
       - name: Verify the site answers
         run: |
           code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 ${{ secrets.SITE_URL }})
           echo "Home page returned $code"
           test "$code" = "200"
+
+      # Runners are thrown away after each run, so this is tidiness rather than
+      # cleanup, but a tunnel left up would hold the handshake slot on failures.
+      - name: Leave the private network
+        if: always()
+        run: sudo wg-quick down wg0 || true
