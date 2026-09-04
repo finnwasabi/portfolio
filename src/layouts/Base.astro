@@ -77,6 +77,17 @@ const preview = new URL(image, site.url).href;
         knowsAbout: ["Front-end development", "React", "Next.js", "Design systems", "Web performance"],
       })}
     />
+
+    <!-- Thong ke luot xem, chay bang Umami tu host tren VPS. Khong cookie, khong ho so
+         theo doi ca nhan, nen khong can banner dong y.
+
+         GHIM: src la duong dan cung goc chu khong phai finnumami.duckdns.org. Caddy tren
+         may chu chuyen /stats.js va /api/send sang container umami. Nho vay CSP giu duoc
+         script-src 'self' va connect-src 'self' nguyen ven, va trinh chan quang cao khong
+         cat mat so lieu vi duong dan nam ngay tren ten mien nay.
+
+         Script nay o file ngoai nen khong dinh vao ma bam noi tuyen trong Caddyfile. -->
+    <script defer src="/stats.js" data-website-id="3b9f6c78-6682-4c65-8c6b-ada2fb9a21cb"></script>
   </head>
 
   <body>
