@@ -1,0 +1,63 @@
+---
+import Base from "../../layouts/Base.astro";
+import { site } from "../../data/site";
+
+const updated = "24 September 2026";
+---
+
+<Base
+  title="Snapzy Google Drive integration: privacy policy"
+  description="How my personal Google Drive setup for the Snapzy screenshot app handles your data."
+>
+  <article class="mx-auto max-w-3xl px-6 pt-12">
+    <p class="eyebrow">Privacy policy</p>
+    <h1 class="mt-4 font-display text-[clamp(2rem,5vw,3rem)] leading-[1.1] font-extrabold tracking-[-0.03em]">
+      Snapzy Google Drive integration
+    </h1>
+    <p class="mt-4 text-sm text-muted">Last updated {updated}</p>
+
+    <div class="prose mt-10">
+      <h2>What this is</h2>
+      <p>
+        <a href="https://github.com/duongductrong/Snapzy">Snapzy</a> is an open-source screenshot app for macOS. It can
+        upload captures to Google Drive using an OAuth client that the user supplies. This page covers the OAuth client
+        named "Snapzy" that I, {site.name}, registered on Google Cloud for my own use. It is not an official Snapzy
+        service, and it is not offered to the public.
+      </p>
+
+      <h2>Data the app accesses</h2>
+      <ul>
+        <li>
+          <strong>Google Drive files created by the app</strong> (scope <code>drive.file</code>). The app can only see and
+          manage the files it uploads itself. It cannot read anything else in your Drive.
+        </li>
+        <li>
+          <strong>Your email address</strong> (scope <code>userinfo.email</code>), shown in Snapzy so you know which
+          account is connected.
+        </li>
+      </ul>
+
+      <h2>How the data is used</h2>
+      <p>
+        When you choose to upload a capture, Snapzy sends the file straight from your Mac to your Google Drive, into a
+        folder named "Snapzy", and sets it to "anyone with the link can view" so the link can be shared. Sign-in tokens
+        stay on your Mac. No data passes through any server of mine, and I do not collect, store, sell or share any of
+        it.
+      </p>
+      <p>
+        The use of information received from Google APIs adheres to the
+        <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>,
+        including the Limited Use requirements.
+      </p>
+
+      <h2>Removing access and data</h2>
+      <p>
+        Uploaded files live in your own Drive and can be deleted there at any time. To revoke the app's access, remove
+        "Snapzy" at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>.
+      </p>
+
+      <h2>Contact</h2>
+      <p>Questions about this page: <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+    </div>
+  </article>
+</Base>
