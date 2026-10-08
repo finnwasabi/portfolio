@@ -1,13 +1,13 @@
 # tungln.is-a.dev
 
-My portfolio: five case studies about interfaces I have shipped, and how they were built.
+My portfolio: case studies about interfaces I have shipped, and how they were built.
 
 **Live:** https://tungln.is-a.dev
 
 ## Why Astro and not Next.js
 
 I use React and Next.js daily at work, so the obvious move was to reach for them here too.
-I did not, because this is a content site: six pages, no server-side session, no data that
+I did not, because this is a content site: a handful of pages, no server-side session, no data that
 changes between deploys. Next.js earns its weight when there is a runtime to justify it. Here
 it would have meant either keeping a Node process alive on my server, or exporting static
 files anyway.
@@ -26,11 +26,11 @@ largest one from 952 KB down to 34 KB.
 
 ## Stack
 
-- **Astro 5** for static output and content collections
+- **Astro 7** for static output and content collections
 - **TypeScript** throughout, with a Zod schema validating every case study's frontmatter, so a
   typo in a field name fails the build instead of rendering an empty page
 - **Tailwind CSS 4** with a token layer, so the whole palette is a handful of custom properties
-- **Fontsource** to self-host Syne, Inter and JetBrains Mono rather than depend on a font CDN
+- **Fontsource** to self-host Unbounded, Inter and JetBrains Mono rather than depend on a font CDN
 
 ## The hero
 
