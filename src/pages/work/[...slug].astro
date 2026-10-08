@@ -1,6 +1,7 @@
 ---
 import { Image, getImage } from "astro:assets";
 import { getCollection, render } from "astro:content";
+import CopyEmail from "../../components/CopyEmail.astro";
 import Base from "../../layouts/Base.astro";
 import { site } from "../../data/site";
 
@@ -137,13 +138,16 @@ const facts = [
       <div class="reveal rounded-3xl border border-border bg-surface p-10">
         <h2 class="font-display text-2xl font-bold tracking-tight">Curious about the details?</h2>
         <p class="mt-3 text-muted">Happy to talk through how any of this was built.</p>
-        <a
-          href={`mailto:${site.email}`}
-          class="mt-6 inline-flex items-center gap-2 rounded-full bg-brass px-5 py-2.5 text-sm font-medium text-bg transition hover:bg-brass-bright"
-        >
-          {site.email}
-          <span aria-hidden="true">→</span>
-        </a>
+        <div class="mt-6 flex flex-wrap items-center gap-3">
+          <a
+            href={`mailto:${site.email}`}
+            class="inline-flex items-center gap-2 rounded-full bg-brass px-5 py-2.5 text-sm font-medium text-bg transition hover:bg-brass-bright"
+          >
+            {site.email}
+            <span aria-hidden="true">→</span>
+          </a>
+          <CopyEmail />
+        </div>
       </div>
     </section>
   </article>

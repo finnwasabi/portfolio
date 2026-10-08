@@ -244,3 +244,27 @@ body > footer {
     display: none;
   }
 }
+
+/* Theme toggle shows the mode that is on: sun in light, moon in dark. */
+.theme-icon-moon {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-icon-sun {
+    display: none;
+  }
+  :root:not([data-theme="light"]) .theme-icon-moon {
+    display: block;
+  }
+}
+:root[data-theme="dark"] .theme-icon-sun {
+  display: none;
+}
+:root[data-theme="dark"] .theme-icon-moon {
+  display: block;
+}
+
+/* Filter chips need the script; without it they would be buttons that do nothing */
+html:not(.js) .work-filters {
+  display: none;
+}
