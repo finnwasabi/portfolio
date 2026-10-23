@@ -50,6 +50,7 @@ src/
   components/           Hero, work card, marquee, toolbox, open source list, copy email
   pages/                Home, 404, the Snapzy privacy policy, and one page per case study
   assets/work/*.png     Screenshots, matched to a case study by filename
+  og/                   The link-preview card each case study gets at build time
 ```
 
 Adding a project means dropping a markdown file in `content/work/` and, if the site is still

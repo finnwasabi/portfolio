@@ -1,5 +1,5 @@
 ---
-import { Image, getImage } from "astro:assets";
+import { Image } from "astro:assets";
 import { getCollection, render } from "astro:content";
 import CopyEmail from "../../components/CopyEmail.astro";
 import Base from "../../layouts/Base.astro";
@@ -38,11 +38,10 @@ const gallery = Object.entries(extraShots)
 // ahead of the fonts.
 const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
 
-// Link previews expect 1.91:1. Feeding them the raw 16:10 screenshot means the top
-// and bottom get cropped off, and it ships ~900KB for a thumbnail.
-const preview = cover
-  ? await getImage({ src: cover, width: 1200, height: 630, fit: "cover", position: "top", format: "jpeg", quality: 82 })
-  : undefined;
+// Link previews use a card drawn for this case study at build time
+// (src/pages/og/[slug].jpg.ts): title, client and role on the site's canvas,
+// with the screenshot running off the edge when there is one.
+const preview = `/og/${entry.id}.jpg`;
 
 const facts = [
   ["Client", client],
@@ -52,7 +51,7 @@ const facts = [
 ].filter(Boolean) as [string, string][];
 ---
 
-<Base title={title} description={summary} image={preview?.src} type="article">
+<Base title={title} description={summary} image={preview} type="article">
   <article>
     <header class="canvas-grid border-b border-border">
       <div class="mx-auto max-w-5xl px-6 pt-12 pb-14">
