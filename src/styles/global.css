@@ -442,3 +442,49 @@ html.vt-arrived .cover-frame {
 html:not(.js) .work-filters {
   display: none;
 }
+
+/* Outline mode (Alt+Shift+O or the Konami code): boxes as hairlines, no fills,
+   images ghosted, the way a design tool shows structure without paint. */
+html.outline-mode body * {
+  outline: 1px solid color-mix(in oklab, var(--brass) 60%, transparent) !important;
+  outline-offset: -1px;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+html.outline-mode img {
+  opacity: 0.18;
+}
+/* Text that sat on a brass fill would vanish once the fill goes */
+html.outline-mode .text-bg {
+  color: var(--text) !important;
+}
+html.outline-mode .surface-grid {
+  outline: none !important;
+}
+html.outline-mode .outline-toast {
+  outline: none !important;
+  background-color: var(--text) !important;
+}
+.outline-toast {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 50%;
+  z-index: 60;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font: 500 12px/1.2 var(--font-mono);
+  letter-spacing: 0.04em;
+  opacity: 0;
+  transform: translate(-50%, 8px);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+  pointer-events: none;
+}
+.outline-toast.is-shown {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
