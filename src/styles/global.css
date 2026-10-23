@@ -19,6 +19,8 @@
   --grid: rgba(23, 18, 33, 0.07);
   --line: rgba(23, 18, 33, 0.11);
   --node: rgba(138, 90, 18, 0.5);
+  /* Measurement red, after the one design tools use, dark enough for white text */
+  --redline: #c8371a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -294,6 +296,62 @@ body > footer {
   .surface-grid {
     display: none;
   }
+}
+
+/* Hero inspector redlines: distance from the selected layer to each artboard
+   edge while Alt is held. Positioned from Hero.astro through the CSSOM. */
+.redline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  pointer-events: none;
+  background: var(--redline);
+  z-index: 5;
+}
+.redline.is-on {
+  display: block;
+}
+.redline-top,
+.redline-bottom {
+  width: 1px;
+}
+.redline-left,
+.redline-right {
+  height: 1px;
+}
+.redline-tag {
+  position: absolute;
+  padding: 2px 4px;
+  border-radius: 3px;
+  background: var(--redline);
+  color: #fff;
+  font: 500 10px/1 var(--font-mono);
+  white-space: nowrap;
+}
+.redline-top .redline-tag,
+.redline-bottom .redline-tag {
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+}
+.redline-left .redline-tag,
+.redline-right .redline-tag {
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+/* On narrow screens the panel is hidden until someone asks to inspect */
+@media (width < 64rem) {
+  .is-inspecting #props {
+    display: block;
+    margin-top: 2rem;
+  }
+}
+
+/* The inspect button needs the script, like the filter chips below */
+html:not(.js) .inspect-toggle {
+  display: none;
 }
 
 /* Theme toggle shows the mode that is on: sun in light, moon in dark. */
