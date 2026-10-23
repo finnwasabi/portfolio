@@ -19,6 +19,8 @@
   --grid: rgba(23, 18, 33, 0.07);
   --line: rgba(23, 18, 33, 0.11);
   --node: rgba(138, 90, 18, 0.5);
+  /* Measurement red, after the one design tools use, dark enough for white text */
+  --redline: #c8371a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -69,6 +71,22 @@
   --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", monospace;
 }
 
+/* Headings break into even lines instead of leaving one word stranded, and body
+   copy avoids a lone last word. Both are hints: older browsers just wrap as before.
+   In the base layer so a utility on a single element can still override them. */
+@layer base {
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
+  }
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
@@ -112,6 +130,41 @@ html.js .reveal {
 html.js .reveal.is-in {
   opacity: 1;
   transform: none;
+}
+
+/* Where the browser can tie an animation to scroll position, the reveal runs on
+   the compositor with no script at all: each section settles in over the first
+   220px of its entry into the viewport. Anything well inside the screen at load is past
+   that range, so it simply shows. The observer in Base.astro stands down when this
+   applies and stays the fallback everywhere else. The range is a fixed 220px
+   rather than a share of the element, so a long case study body is not left
+   half transparent while someone reads its first paragraphs. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    html.js .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      animation: reveal-in linear both;
+    }
+    /* A separate, slightly stronger rule on purpose: the minifier folds a
+       timeline declared next to the shorthand into it, and browsers drop an
+       animation shorthand that carries view(). */
+    :root.js .reveal {
+      animation-timeline: view();
+      animation-range: entry 0px entry 220px;
+    }
+    /* Already on screen at load (marked from Base.astro): shown in full */
+    :root.js .reveal.is-in {
+      animation: none;
+    }
+  }
+}
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
 }
 
 /* Hero lines lift in one after another on first paint. */
@@ -194,6 +247,35 @@ html.js .reveal.is-in {
   font-weight: 600;
 }
 
+/* "Open to work" badge: a green dot with a slow ring, still under reduced motion */
+.availability-dot {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #2f9e5b;
+}
+.availability-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  animation: availability-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes availability-ping {
+  75%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .availability-dot::after {
+    animation: none;
+  }
+}
+
 /* A grid that only exists where the pointer is. Two layers: fine lines for texture
    and a heavier dot where lines cross, both revealed through a mask that follows
    the cursor. Nothing animates on scroll, only two custom properties change. */
@@ -245,6 +327,62 @@ body > footer {
   }
 }
 
+/* Hero inspector redlines: distance from the selected layer to each artboard
+   edge while Alt is held. Positioned from Hero.astro through the CSSOM. */
+.redline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  pointer-events: none;
+  background: var(--redline);
+  z-index: 5;
+}
+.redline.is-on {
+  display: block;
+}
+.redline-top,
+.redline-bottom {
+  width: 1px;
+}
+.redline-left,
+.redline-right {
+  height: 1px;
+}
+.redline-tag {
+  position: absolute;
+  padding: 2px 4px;
+  border-radius: 3px;
+  background: var(--redline);
+  color: #fff;
+  font: 500 10px/1 var(--font-mono);
+  white-space: nowrap;
+}
+.redline-top .redline-tag,
+.redline-bottom .redline-tag {
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+}
+.redline-left .redline-tag,
+.redline-right .redline-tag {
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+/* On narrow screens the panel is hidden until someone asks to inspect */
+@media (width < 64rem) {
+  .is-inspecting #props {
+    display: block;
+    margin-top: 2rem;
+  }
+}
+
+/* The inspect button needs the script, like the filter chips below */
+html:not(.js) .inspect-toggle {
+  display: none;
+}
+
 /* Theme toggle shows the mode that is on: sun in light, moon in dark. */
 .theme-icon-moon {
   display: none;
@@ -262,6 +400,17 @@ body > footer {
 }
 :root[data-theme="dark"] .theme-icon-moon {
   display: block;
+}
+
+/* Theme switch: the circle drawn from the toggle replaces the default fade */
+html.theme-switching .site-header,
+html.theme-switching .case-cover {
+  view-transition-name: none;
+}
+html.theme-switching::view-transition-old(root),
+html.theme-switching::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 /* The marquee under the hero. Kept here rather than in Marquee.astro: a component
@@ -290,7 +439,81 @@ body > footer {
   }
 }
 
+/* Moving between pages cross-fades, and the screenshot of the project being
+   opened morphs from its card into the case study cover (and back). The card
+   side gets its name from src/scripts/view-transitions.js, only for the one
+   card involved. Browsers without cross-document transitions navigate as before. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+.case-cover {
+  view-transition-name: cover;
+}
+/* The header is identical on every page, so it stays put rather than fading */
+.site-header {
+  view-transition-name: site-header;
+}
+html.vt-arrived .cover-frame {
+  animation: none;
+}
+::view-transition-group(cover) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+}
+
 /* Filter chips need the script; without it they would be buttons that do nothing */
 html:not(.js) .work-filters {
   display: none;
+}
+
+/* Outline mode (Alt+Shift+O or the Konami code): boxes as hairlines, no fills,
+   images ghosted, the way a design tool shows structure without paint. */
+html.outline-mode body * {
+  outline: 1px solid color-mix(in oklab, var(--brass) 60%, transparent) !important;
+  outline-offset: -1px;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+html.outline-mode img {
+  opacity: 0.18;
+}
+/* Text that sat on a brass fill would vanish once the fill goes */
+html.outline-mode .text-bg {
+  color: var(--text) !important;
+}
+html.outline-mode .surface-grid {
+  outline: none !important;
+}
+html.outline-mode .outline-toast {
+  outline: none !important;
+  background-color: var(--text) !important;
+}
+.outline-toast {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 50%;
+  z-index: 60;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  background: var(--text);
+  color: var(--bg);
+  font: 500 12px/1.2 var(--font-mono);
+  letter-spacing: 0.04em;
+  opacity: 0;
+  transform: translate(-50%, 8px);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+  pointer-events: none;
+}
+.outline-toast.is-shown {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }

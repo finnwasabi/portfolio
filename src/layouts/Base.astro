@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import Colophon from "../components/Colophon.astro";
 import { site } from "../data/site";
 // The browser only finds a font once the stylesheet is parsed, so the first paint
 // waited on two round trips in a row. Preloading the two faces every page shows
@@ -10,6 +11,8 @@ import { site } from "../data/site";
 // the @font-face rules point at, so Vite emits each once under one hash.
 import unboundedLatin from "@fontsource-variable/unbounded/files/unbounded-latin-wght-normal.woff2?url";
 import interLatin from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
+// Emitted as a hashed file and loaded as a classic script; see the file for why
+import viewTransitions from "../scripts/view-transitions.js?url";
 
 interface Props {
   title?: string;
@@ -65,8 +68,8 @@ const preview = new URL(image, site.url).href;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={preview} />
 
-    <!-- Follows the system scheme until the visitor picks one; the toggle script
-         below then rewrites both so the browser bar matches the page. -->
+    {/* Follows the system scheme until the visitor picks one; the toggle script
+         below then rewrites both so the browser bar matches the page. */}
     <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#120e1a" media="(prefers-color-scheme: dark)" />
     <meta name="author" content={site.name} />
@@ -76,7 +79,9 @@ const preview = new URL(image, site.url).href;
     <link rel="preload" href={unboundedLatin} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
 
-    <!-- CANH BAO: noi dung script nay duoc bam va ghim vao Content-Security-Policy
+    <script is:inline src={viewTransitions}></script>
+
+    {/* CANH BAO: noi dung script nay duoc bam va ghim vao Content-Security-Policy
          trong Caddyfile tren may chu (khoi tungln.is-a.dev). Sua mot ky tu la ma bam
          doi, va trinh duyet se lang le tu choi chay no: giao dien sang toi thoi nho
          lua chon, khong bao gi trong console. Buoc "Check the inline script hash" trong
@@ -84,7 +89,7 @@ const preview = new URL(image, site.url).href;
 
          Van phai de is:inline: no can chay TRUOC khi trang ve lan dau, neu khong nguoi
          dung da chon nen toi se thay mot nhay nen sang. Moi script khac trong trang deu
-         da duoc day ra file ngoai de CSP chi can script-src 'self'. -->
+         da duoc day ra file ngoai de CSP chi can script-src 'self'. */}
     <script is:inline>
       document.documentElement.classList.add("js");
       const saved = localStorage.getItem("theme");
@@ -107,7 +112,7 @@ const preview = new URL(image, site.url).href;
       })}
     />
 
-    <!-- Thong ke luot xem, chay bang Umami tu host tren VPS. Khong cookie, khong ho so
+    {/* Thong ke luot xem, chay bang Umami tu host tren VPS. Khong cookie, khong ho so
          theo doi ca nhan, nen khong can banner dong y.
 
          GHIM: src la duong dan cung goc chu khong phai finnumami.duckdns.org. Caddy tren
@@ -115,7 +120,7 @@ const preview = new URL(image, site.url).href;
          script-src 'self' va connect-src 'self' nguyen ven, va trinh chan quang cao khong
          cat mat so lieu vi duong dan nam ngay tren ten mien nay.
 
-         Script nay o file ngoai nen khong dinh vao ma bam noi tuyen trong Caddyfile. -->
+         Script nay o file ngoai nen khong dinh vao ma bam noi tuyen trong Caddyfile. */}
     <script defer src="/stats.js" data-website-id="3b9f6c78-6682-4c65-8c6b-ada2fb9a21cb"></script>
   </head>
 
@@ -128,15 +133,29 @@ const preview = new URL(image, site.url).href;
       >Skip to content</a
     >
 
-    <header class="sticky top-0 z-40 border-b border-border/60 bg-bg/80 backdrop-blur-md">
+    <header class="site-header sticky top-0 z-40 border-b border-border/60 bg-bg/80 backdrop-blur-md">
       <nav class="mx-auto flex h-16 max-w-5xl items-center justify-between px-6" aria-label="Main">
-        <a href="/" class="font-display text-base font-bold tracking-tight hover:text-brass">
-          LNT<span class="text-brass">.</span>
-        </a>
+        <div class="flex items-center gap-3">
+          <a href="/" class="font-display text-base font-bold tracking-tight hover:text-brass">
+            LNT<span class="text-brass">.</span>
+          </a>
+          {
+            site.availability.open && (
+              <a
+                href="/#contact"
+                class="inline-flex items-center gap-1.5 rounded-full border border-border px-2 py-1 font-mono text-[10px] tracking-wide text-muted uppercase transition-colors hover:border-brass hover:text-text sm:px-2.5"
+              >
+                <span class="availability-dot" aria-hidden="true" />
+                {/* A dot alone on a phone, where the nav needs the room */}
+                <span class="sr-only sm:not-sr-only">{site.availability.label}</span>
+              </a>
+            )
+          }
+        </div>
 
-        <!-- Three links fit on a 320px screen with the gap tightened, so they all
+        {/* Three links fit on a 320px screen with the gap tightened, so they all
              stay visible. A hamburger would hide the whole nav behind a tap to
-             save room that is not needed. -->
+             save room that is not needed. */}
         <div class="flex items-center gap-4 text-sm sm:gap-6">
           {
             nav.map((n) => (
@@ -150,8 +169,8 @@ const preview = new URL(image, site.url).href;
             ))
           }
 
-          <!-- Both icons are in the markup and CSS picks one, so the right glyph is
-               there on first paint without waiting for a script. -->
+          {/* Both icons are in the markup and CSS picks one, so the right glyph is
+               there on first paint without waiting for a script. */}
           <button
             id="theme-toggle"
             type="button"
@@ -196,7 +215,7 @@ const preview = new URL(image, site.url).href;
 
     <footer class="mt-28 border-t border-border/60">
       <div
-        class="mx-auto flex max-w-5xl flex-col gap-3 px-6 py-9 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
+        class="mx-auto flex max-w-5xl flex-col gap-3 px-6 pt-9 pb-5 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
       >
         <p class="font-mono text-xs">© {new Date().getFullYear()} {site.name}</p>
         <div class="flex gap-5">
@@ -214,11 +233,14 @@ const preview = new URL(image, site.url).href;
           }
         </div>
       </div>
+      <div class="mx-auto max-w-5xl px-6 pb-9">
+        <Colophon />
+      </div>
     </footer>
 
-    <!-- Khong dung is:inline: script nay chi gan mot event listener, chay sau khi
+    {/* Khong dung is:inline: script nay chi gan mot event listener, chay sau khi
          DOM san sang la du. De Astro dong goi ra file ngoai thi Content-Security-Policy
-         chi can script-src 'self', khong phai bam noi dung. -->
+         chi can script-src 'self', khong phai bam noi dung. */}
     <script>
       const root = document.documentElement;
       const toggle = document.getElementById("theme-toggle");
@@ -246,13 +268,41 @@ const preview = new URL(image, site.url).href;
 
       toggle?.addEventListener("click", () => {
         const next = effective() === "dark" ? "light" : "dark";
-        root.dataset.theme = next;
-        try {
-          localStorage.setItem("theme", next);
-        } catch {
-          // Private windows can refuse storage; the switch still works for this visit
+        const apply = () => {
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem("theme", next);
+          } catch {
+            // Private windows can refuse storage; the switch still works for this visit
+          }
+          sync();
+        };
+
+        if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          apply();
+          return;
         }
-        sync();
+
+        // The new theme spreads out from the button as a circle. theme-switching
+        // turns off the page-to-page transition names for the moment, so the
+        // header and a cover are swept by the circle instead of fading on their own.
+        root.classList.add("theme-switching");
+        const transition = document.startViewTransition(apply);
+        transition.ready.then(() => {
+          const r = toggle.getBoundingClientRect();
+          const x = r.left + r.width / 2;
+          const y = r.top + r.height / 2;
+          const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+          root.animate(
+            { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+            {
+              duration: 560,
+              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+              pseudoElement: "::view-transition-new(root)",
+            },
+          );
+        });
+        transition.finished.finally(() => root.classList.remove("theme-switching"));
       });
     </script>
 
@@ -316,14 +366,80 @@ const preview = new URL(image, site.url).href;
     </script>
 
     <script>
+      // Outline mode, after the view of the same name in Figma: every box drawn
+      // as a thin line, fills gone. Alt+Shift+O toggles it (Figma's own shortcut,
+      // Ctrl/Cmd+Shift+O, opens the bookmarks in most browsers), and so does the
+      // Konami code. It lasts for this page view only.
+      const root = document.documentElement;
+      const konami = [
+        "ArrowUp",
+        "ArrowUp",
+        "ArrowDown",
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowRight",
+        "ArrowLeft",
+        "ArrowRight",
+        "KeyB",
+        "KeyA",
+      ];
+      let progress = 0;
+      let toast: HTMLElement | null = null;
+      let toastTimer = 0;
+
+      const flip = () => {
+        const on = root.classList.toggle("outline-mode");
+        if (!toast) {
+          toast = document.createElement("p");
+          toast.className = "outline-toast";
+          toast.setAttribute("role", "status");
+          document.body.append(toast);
+        }
+        toast.textContent = on ? "Outline mode on. Alt+Shift+O to leave." : "Outline mode off.";
+        toast.classList.add("is-shown");
+        clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(() => toast?.classList.remove("is-shown"), 2600);
+      };
+
+      document.addEventListener("keydown", (e) => {
+        const typing = e.target instanceof HTMLElement && e.target.closest("input, textarea, [contenteditable]");
+        if (typing) return;
+        if (e.altKey && e.shiftKey && e.code === "KeyO") {
+          e.preventDefault();
+          flip();
+          return;
+        }
+        progress = e.code === konami[progress] ? progress + 1 : e.code === konami[0] ? 1 : 0;
+        if (progress === konami.length) {
+          progress = 0;
+          flip();
+        }
+      });
+    </script>
+
+    <script>
       // Sections settle in as they come into view. Two safety nets, because a
       // section that never shows up is far worse than one that animates late:
       //   1. anything at or above the fold on load is shown immediately, so a
       //      #hash link that jumps down the page does not strand what it skipped;
       //   2. a scroll pass catches elements the observer missed when the page is
       //      scrolled faster than it can report intersections.
+      // Browsers that support scroll-driven animations reveal in CSS instead
+      // (global.css). Reduced motion is covered there too: it shows everything.
+      // Safety net 1 still applies there: without it, a section near the bottom
+      // edge at load would sit half faded until the page is scrolled.
       const items = new Set(document.querySelectorAll(".reveal"));
-      if (items.size) {
+      const scrollDriven = CSS.supports("animation-timeline: view()");
+      if (items.size && scrollDriven) {
+        // The 18px allows for the lift: a box whose layout sits just inside the
+        // edge measures just outside it while it is still translated down
+        requestAnimationFrame(() => {
+          for (const el of items) {
+            if (el.getBoundingClientRect().top < window.innerHeight + 18) el.classList.add("is-in");
+          }
+        });
+      }
+      if (items.size && !scrollDriven) {
         const show = (el: Element) => {
           el.classList.add("is-in");
           items.delete(el);

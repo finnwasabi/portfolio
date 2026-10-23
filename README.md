@@ -16,9 +16,9 @@ What that decision bought:
 
 | | |
 |---|---|
-| Total build output | 818 KB before images, 509 KB of it fonts: 18 subset files, of which a visitor fetches three |
-| Home page, compressed | 25.6 KB with zstd. A third of the 97 KB raw is the tool logos, inlined as SVG |
-| JavaScript shipped | 4.6 KB (2.7 KB gzipped) in seven small modules on the home page, no framework runtime |
+| Total build output | 812 KB before images, 509 KB of it fonts: 18 subset files, of which a visitor fetches three |
+| Home page, compressed | 25.3 KB with zstd. A third of the 98 KB raw is the tool logos, inlined as SVG |
+| JavaScript shipped | 9.9 KB (5.1 KB gzipped) in nine small files on the home page, no framework runtime |
 | Server memory | 0 MB. Caddy reads the files off disk |
 
 The screenshots go through Astro's image pipeline and come out as WebP in three widths, so the
@@ -50,10 +50,19 @@ src/
   components/           Hero, work card, marquee, toolbox, open source list, copy email
   pages/                Home, 404, the Snapzy privacy policy, and one page per case study
   assets/work/*.png     Screenshots, matched to a case study by filename
+  og/                   The link-preview card each case study gets at build time
 ```
 
 Adding a project means dropping a markdown file in `content/work/` and, if the site is still
 up, a screenshot named after it. Nothing else to wire up.
+
+A case study can carry more when there is more to show. Each block only appears once filled:
+
+- `metrics` in the frontmatter, up to four `{ value, label }` pairs, shown as a strip under the cover
+- `decisions`, a list of `{ title, body }`, shown as numbered cards after the write-up
+- more screenshots in `assets/work/<slug>/`, shown as a gallery in filename order
+- `poster` (`dashboard`, `charts`, `document`, `storefront` or `mobile`) picks the wireframe drawn
+  on the card when there is no screenshot at all
 
 ## Running it
 

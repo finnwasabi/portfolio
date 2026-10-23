@@ -17,8 +17,8 @@ const layerProps = (pairs: [string, string][]) =>
 ---
 
 <section class="canvas-grid relative overflow-x-clip border-b border-border">
-  <!-- Ambient light that drifts toward the pointer. Deliberately faint: it is
-       atmosphere, not decoration you should notice. -->
+  {/* Ambient light that drifts toward the pointer. Deliberately faint: it is
+       atmosphere, not decoration you should notice. */}
   <div
     id="glow"
     class="pointer-events-none absolute -top-40 left-1/2 -z-10 size-[42rem] -translate-x-1/2 rounded-full opacity-60 blur-[90px] transition-transform duration-700 ease-out"
@@ -27,13 +27,19 @@ const layerProps = (pairs: [string, string][]) =>
   </div>
 
   <div class="mx-auto max-w-5xl px-6 pt-16 pb-20 sm:pt-24 sm:pb-28">
-    <!-- The artboard. Hovering any child reveals its layer name and size. -->
+    {/* The artboard. Hovering any child reveals its layer name and size. */}
     <div id="artboard" class="relative">
-      <span
-        class="eyebrow rise absolute -top-8 right-0 hidden items-center gap-1.5 sm:flex"
-        style="animation-delay: 60ms"
+      {/* Hover works on its own. The button opens the same inspector to touch and
+           keyboard: layers take focus or a tap, and the panel shows on any width. */}
+      <button
+        type="button"
+        id="inspect-toggle"
+        aria-pressed="false"
+        aria-describedby="inspect-help"
+        class="inspect-toggle eyebrow rise absolute -top-8 right-0 flex items-center gap-1.5 [animation-delay:60ms] transition-colors hover:text-brass aria-pressed:text-brass"
       >
-        Hover to inspect
+        <span class="hidden [@media(hover:hover)]:inline">Hover to inspect</span>
+        <span class="[@media(hover:hover)]:hidden">Inspect</span>
         <svg
           class="size-3"
           viewBox="0 0 12 12"
@@ -45,10 +51,14 @@ const layerProps = (pairs: [string, string][]) =>
           <path d="M6 1v3M6 8v3M1 6h3M8 6h3"></path>
           <circle cx="6" cy="6" r="1.2"></circle>
         </svg>
-      </span>
+      </button>
+      <p id="inspect-help" class="sr-only">
+        Inspect the header like a design file: move through its layers with Tab to read each one's
+        properties. Press Escape to stop.
+      </p>
 
-      <!-- Two lines on a phone. The separator dot only earns its place once the
-           two halves actually share a line. -->
+      {/* Two lines on a phone. The separator dot only earns its place once the
+           two halves actually share a line. */}
       <p
         class="eyebrow rise flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2"
         style="animation-delay: 120ms"
@@ -65,11 +75,11 @@ const layerProps = (pairs: [string, string][]) =>
         <span>{site.location}</span>
       </p>
 
-      <!-- The name keeps the full 976px so it stays on one line, and it never
-           needs more than 708px of that, which leaves the panel its column. -->
+      {/* The name keeps the full 976px so it stays on one line, and it never
+           needs more than 708px of that, which leaves the panel its column. */}
       <div class="relative mt-5">
-        <!-- w-fit shrinks the box to the glyphs, so the inspector outline hugs
-             the name instead of running under the panel beside it -->
+        {/* w-fit shrinks the box to the glyphs, so the inspector outline hugs
+             the name instead of running under the panel beside it */}
         <h1
           class="rise w-fit pb-[0.06em] font-display text-[clamp(2.75rem,8vw,5.5rem)] leading-[1.02] font-extrabold tracking-[-0.03em]"
           style="animation-delay: 200ms"
@@ -84,7 +94,7 @@ const layerProps = (pairs: [string, string][]) =>
           Le Nhat Tung
         </h1>
 
-        <!-- Right padding is the panel's column, kept clear from lg up -->
+        {/* Right padding is the panel's column, kept clear from lg up */}
         <div class="lg:pr-[17rem]">
           <p
             class="rise mt-8 text-lg leading-relaxed text-muted"
@@ -128,15 +138,27 @@ const layerProps = (pairs: [string, string][]) =>
             >
               Get in touch
             </a>
+            {
+              site.cv && (
+                <a
+                  href={site.cv}
+                  download
+                  class="inline-flex items-center gap-2 rounded-full px-3 py-2.5 text-sm font-medium text-muted transition hover:text-brass"
+                >
+                  Download CV
+                  <span aria-hidden="true">↓</span>
+                </a>
+              )
+            }
           </div>
         </div>
 
-        <!-- The counterpart to the layer inspector: sits vertically centred on
+        {/* The counterpart to the layer inspector: sits vertically centred on
              the whole name-to-buttons block, and swaps to whichever layer the
-             pointer is over. Hidden on touch, where nothing can be hovered. -->
+             pointer is over. Hidden on touch, where nothing can be hovered. */}
         <aside
           id="props"
-          class="rise hidden rounded-xl border border-border bg-surface/60 p-5 backdrop-blur-sm lg:absolute lg:top-1/2 lg:right-0 lg:block lg:w-60 lg:-translate-y-1/2"
+          class="rise relative z-10 hidden rounded-xl border border-border bg-surface/60 p-5 backdrop-blur-sm lg:absolute lg:top-1/2 lg:right-0 lg:block lg:w-60 lg:-translate-y-1/2"
           style="animation-delay: 460ms"
         >
           <p class="eyebrow border-b border-border pb-3" id="props-title">Properties</p>
@@ -150,10 +172,13 @@ const layerProps = (pairs: [string, string][]) =>
               ))
             }
           </dl>
+          <p class="mt-4 hidden border-t border-border pt-3 font-mono text-[10px] text-muted [@media(hover:hover)]:block">
+            Hold <kbd class="rounded border border-border px-1">Alt</kbd> to measure
+          </p>
         </aside>
       </div>
 
-      <!-- Selection marker, positioned by script -->
+      {/* Selection marker, positioned by script */}
       <div
         id="marker"
         class="pointer-events-none absolute top-0 left-0 hidden rounded-[3px] border border-brass"
@@ -173,13 +198,15 @@ const layerProps = (pairs: [string, string][]) =>
   const marker = document.getElementById("marker");
   const label = document.getElementById("marker-label");
   const glow = document.getElementById("glow");
+  const panel = document.getElementById("props");
+  const toggle = document.getElementById("inspect-toggle");
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Touch devices have no hover, and a marker that never moves is just clutter.
+  // Touch devices have no hover, so there the inspector waits for the button.
   const canHover = matchMedia("(hover: hover)").matches;
 
-  // The properties panel reads whichever layer the pointer is over, and falls
-  // back to the standing set the moment it leaves.
+  // The properties panel reads whichever layer is selected, and falls back to
+  // the standing set the moment nothing is.
   const list = document.getElementById("props-list");
   const title = document.getElementById("props-title");
   const restingRows = list?.innerHTML ?? "";
@@ -216,28 +243,136 @@ const layerProps = (pairs: [string, string][]) =>
     list.innerHTML = restingRows;
   };
 
-  if (artboard && marker && label && canHover) {
-    artboard.addEventListener("mousemove", (e) => {
-      const target = (e.target as HTMLElement).closest<HTMLElement>("[data-layer]");
-      if (!target) {
-        marker.classList.add("hidden");
-        showResting();
-        return;
+  // Redlines, as in a design tool: with Alt held, the selected layer shows its
+  // distance to each edge of the artboard. Built once, positioned on demand.
+  const sides = ["top", "right", "bottom", "left"] as const;
+  const redlines = artboard
+    ? sides.map((side) => {
+        const line = document.createElement("div");
+        line.className = `redline redline-${side}`;
+        line.setAttribute("aria-hidden", "true");
+        const tag = document.createElement("span");
+        tag.className = "redline-tag";
+        line.append(tag);
+        artboard.append(line);
+        return { side, line, tag };
+      })
+    : [];
+
+  let current: HTMLElement | null = null;
+  let measuring = false;
+  let inspecting = false;
+
+  const drawRedlines = (t: DOMRect, a: DOMRect) => {
+    const left = t.left - a.left;
+    const top = t.top - a.top;
+    const midX = left + t.width / 2;
+    const midY = top + t.height / 2;
+    const gaps = { top, right: a.right - t.right, bottom: a.bottom - t.bottom, left };
+    for (const { side, line, tag } of redlines) {
+      const gap = gaps[side];
+      line.classList.toggle("is-on", measuring && gap >= 1);
+      if (!measuring || gap < 1) continue;
+      tag.textContent = String(Math.round(gap));
+      if (side === "top" || side === "bottom") {
+        line.style.transform = `translate(${midX}px, ${side === "top" ? 0 : t.bottom - a.top}px)`;
+        line.style.height = `${gap}px`;
+      } else {
+        line.style.transform = `translate(${side === "left" ? 0 : t.right - a.left}px, ${midY}px)`;
+        line.style.width = `${gap}px`;
       }
-      const t = target.getBoundingClientRect();
-      const a = artboard.getBoundingClientRect();
-      marker.style.transform = `translate(${t.left - a.left - 4}px, ${t.top - a.top - 4}px)`;
-      marker.style.width = `${t.width + 8}px`;
-      marker.style.height = `${t.height + 8}px`;
-      label.textContent = `${target.dataset.layer}  ${Math.round(t.width)}×${Math.round(t.height)}`;
-      marker.classList.remove("hidden");
-      showLayer(target, t.width, t.height);
+    }
+  };
+
+  const select = (target: HTMLElement | null) => {
+    current = target;
+    if (!artboard || !marker || !label) return;
+    if (!target) {
+      marker.classList.add("hidden");
+      for (const { line } of redlines) line.classList.remove("is-on");
+      showResting();
+      return;
+    }
+    const t = target.getBoundingClientRect();
+    const a = artboard.getBoundingClientRect();
+    marker.style.transform = `translate(${t.left - a.left - 4}px, ${t.top - a.top - 4}px)`;
+    marker.style.width = `${t.width + 8}px`;
+    marker.style.height = `${t.height + 8}px`;
+    label.textContent = `${target.dataset.layer}  ${Math.round(t.width)}×${Math.round(t.height)}`;
+    marker.classList.remove("hidden");
+    showLayer(target, t.width, t.height);
+    drawRedlines(t, a);
+  };
+
+  const layerAt = (el: EventTarget | null) =>
+    el instanceof Element ? el.closest<HTMLElement>("[data-layer]") : null;
+
+  if (artboard && marker && label) {
+    const layers = [...artboard.querySelectorAll<HTMLElement>("[data-layer]")];
+
+    if (canHover) {
+      artboard.addEventListener("mousemove", (e) => {
+        const target = layerAt(e.target);
+        if (target !== current || measuring) select(target);
+      });
+      artboard.addEventListener("mouseleave", () => {
+        if (!inspecting) select(null);
+      });
+    }
+
+    const setInspecting = (on: boolean) => {
+      inspecting = on;
+      toggle?.setAttribute("aria-pressed", String(on));
+      artboard.classList.toggle("is-inspecting", on);
+      // Text layers become focusable so Tab walks through them; the buttons
+      // already are. The panel announces each layer only while this is on.
+      for (const layer of layers) {
+        if (layer.matches("a, button")) continue;
+        if (on) layer.setAttribute("tabindex", "0");
+        else layer.removeAttribute("tabindex");
+      }
+      if (on) panel?.setAttribute("aria-live", "polite");
+      else panel?.removeAttribute("aria-live");
+      if (!on) select(null);
+    };
+
+    toggle?.addEventListener("click", () => setInspecting(!inspecting));
+
+    artboard.addEventListener("focusin", (e) => {
+      if (inspecting) select(layerAt(e.target));
     });
 
-    artboard.addEventListener("mouseleave", () => {
-      marker.classList.add("hidden");
-      showResting();
+    // While inspecting, a tap on a layer selects it rather than following it
+    artboard.addEventListener("click", (e) => {
+      if (!inspecting) return;
+      const target = layerAt(e.target);
+      if (!target) return;
+      e.preventDefault();
+      select(target);
     });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && inspecting) {
+        setInspecting(false);
+        toggle?.focus();
+      }
+      if (e.key === "Alt" && current) {
+        // Firefox on Windows would otherwise open its menu bar on release
+        e.preventDefault();
+        measuring = true;
+        select(current);
+      }
+    });
+    document.addEventListener("keyup", (e) => {
+      if (e.key !== "Alt") return;
+      measuring = false;
+      select(current);
+    });
+    window.addEventListener("blur", () => {
+      measuring = false;
+      select(current);
+    });
+    window.addEventListener("resize", () => select(current), { passive: true });
   }
 
   if (glow && !still && canHover) {

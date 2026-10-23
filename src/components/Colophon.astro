@@ -1,0 +1,39 @@
+---
+import { execSync } from "node:child_process";
+import { PLACEHOLDER } from "../../integrations/page-weight.mjs";
+
+// How this page was made, read at build time, so it costs nothing to show.
+// CI provides the commit; a local build asks git, and goes without if it can't.
+let sha = process.env.GITHUB_SHA ?? "";
+if (!sha) {
+  try {
+    sha = execSync("git rev-parse HEAD", { stdio: ["ignore", "pipe", "ignore"] }).toString().trim();
+  } catch {
+    sha = "";
+  }
+}
+
+const built = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric" }).format(
+  new Date(),
+);
+---
+
+<p class="font-mono text-[11px] leading-relaxed text-muted">
+  Built with Astro and Tailwind, fonts self-hosted, no cookies. This page is {PLACEHOLDER} of HTML, CSS and
+  JavaScript, compressed, before fonts and images. Built {built}
+  {
+    sha && (
+      <>
+        {" "}from{" "}
+        <a
+          href={`https://github.com/finnwasabi/portfolio/commit/${sha}`}
+          class="underline decoration-border underline-offset-2 transition-colors hover:text-brass"
+          rel="noopener"
+          target="_blank">{sha.slice(0, 7)}</a
+        >
+      </>
+    )
+  }. <span class="whitespace-nowrap">
+    <span class="sr-only">Try the Konami code.</span><span aria-hidden="true">↑↑↓↓←→←→BA</span>
+  </span>
+</p>

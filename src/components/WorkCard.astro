@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
+import Poster from "./Poster.astro";
 
 interface Props {
   entry: CollectionEntry<"work">;
@@ -8,11 +9,12 @@ interface Props {
 }
 
 const { entry, index } = Astro.props;
-const { title, client, period, summary, stack, teamSize } = entry.data;
+const { title, client, period, summary, stack, teamSize, poster } = entry.data;
 
 // Screenshots are named after the entry id, so adding one is just dropping a
-// file in. Projects whose site is gone fall back to a typographic poster,
-// hidden from screen readers because the heading below already names it.
+// file in. Projects whose site is gone fall back to a wireframe poster of the
+// kind of interface it was (the `poster` field), hidden from screen readers
+// because the heading below already names the project.
 //
 // Every card loads lazily: the grid starts below the hero, the marquee and the
 // focus section even on a tall desktop, so an eager card only competes with the
@@ -42,15 +44,11 @@ const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
           loading="lazy"
         />
       ) : (
-        <div class="canvas-grid grid size-full place-items-center" aria-hidden="true">
-          <span class="px-6 text-center font-display text-2xl font-bold tracking-tight text-muted/60">
-            {title}
-          </span>
-        </div>
+        <Poster title={title} kind={poster ?? "dashboard"} />
       )
     }
 
-    <!-- Sits over the image, slides up on hover -->
+    {/* Sits over the image, slides up on hover */}
     <span
       class="absolute right-3 bottom-3 translate-y-2 rounded-full bg-brass px-3 py-1 font-mono text-[10px] tracking-wider text-bg uppercase opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100"
     >
@@ -59,8 +57,8 @@ const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
   </div>
 
   <div class="p-6">
-    <!-- Stacked while the card is narrow so the title owns its line; one row once
-         the card itself is wide enough for the date to sit opposite it. -->
+    {/* Stacked while the card is narrow so the title owns its line; one row once
+         the card itself is wide enough for the date to sit opposite it. */}
     <div class="flex flex-col gap-1 @[24rem]:flex-row @[24rem]:items-baseline @[24rem]:justify-between @[24rem]:gap-4">
       <h3 class="font-display text-xl font-bold tracking-tight transition-colors group-hover:text-brass">
         {title}
@@ -83,9 +81,9 @@ const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
         }
       </div>
 
-      <!-- Left aligned in a narrow card, opposite the chips once there is room.
+      {/* Left aligned in a narrow card, opposite the chips once there is room.
            The count stays glued to its unit so a wrap never strands "4" from
-           "people" on the next line. -->
+           "people" on the next line. */}
       <span class="eyebrow @[27rem]:ml-auto">
         {client}
         {teamSize ? <span class="whitespace-nowrap">{` · ${teamSize} people`}</span> : ""}

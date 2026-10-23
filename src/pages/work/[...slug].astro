@@ -1,5 +1,5 @@
 ---
-import { Image, getImage } from "astro:assets";
+import { Image } from "astro:assets";
 import { getCollection, render } from "astro:content";
 import CopyEmail from "../../components/CopyEmail.astro";
 import Base from "../../layouts/Base.astro";
@@ -17,21 +17,31 @@ export async function getStaticPaths() {
 
 const { entry, next } = Astro.props;
 const { Content } = await render(entry);
-const { title, client, role, period, stack, teamSize, summary, href } = entry.data;
+const { title, client, role, period, stack, teamSize, summary, href, metrics, decisions } =
+  entry.data;
 
 const shots = import.meta.glob<{ default: ImageMetadata }>("/src/assets/work/*.png", {
   eager: true,
 });
+// More screens go in src/assets/work/<slug>/ and show as a gallery after the
+// write-up, in filename order. Nothing to declare in the frontmatter.
+const extraShots = import.meta.glob<{ default: ImageMetadata }>("/src/assets/work/*/*.{png,jpg,jpeg,webp}", {
+  eager: true,
+});
+const gallery = Object.entries(extraShots)
+  .filter(([path]) => path.startsWith(`/src/assets/work/${entry.id}/`))
+  .sort(([a], [b]) => a.localeCompare(b, "en", { numeric: true }))
+  .map(([, mod]) => mod.default);
+
 // The cover is the largest paint on the page. It rises in with CSS rather than
 // .reveal, which waits for a script before the image may show, and it is fetched
 // ahead of the fonts.
 const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
 
-// Link previews expect 1.91:1. Feeding them the raw 16:10 screenshot means the top
-// and bottom get cropped off, and it ships ~900KB for a thumbnail.
-const preview = cover
-  ? await getImage({ src: cover, width: 1200, height: 630, fit: "cover", position: "top", format: "jpeg", quality: 82 })
-  : undefined;
+// Link previews use a card drawn for this case study at build time
+// (src/pages/og/[slug].jpg.ts): title, client and role on the site's canvas,
+// with the screenshot running off the edge when there is one.
+const preview = `/og/${entry.id}.jpg`;
 
 const facts = [
   ["Client", client],
@@ -41,7 +51,7 @@ const facts = [
 ].filter(Boolean) as [string, string][];
 ---
 
-<Base title={title} description={summary} image={preview?.src} type="article">
+<Base title={title} description={summary} image={preview} type="article">
   <article>
     <header class="canvas-grid border-b border-border">
       <div class="mx-auto max-w-5xl px-6 pt-12 pb-14">
@@ -72,13 +82,13 @@ const facts = [
     {
       cover && (
         <div class="mx-auto max-w-5xl px-6">
-          <div class="rise -mt-8 overflow-hidden rounded-2xl border border-border shadow-2xl shadow-black/20">
+          <div class="cover-frame rise -mt-8 overflow-hidden rounded-2xl border border-border shadow-2xl shadow-black/20">
             <Image
               src={cover}
               alt={`${title} interface`}
               widths={[640, 1024, 1440]}
               sizes="(min-width: 1024px) 976px, calc(100vw - 48px)"
-              class="w-full"
+              class="case-cover w-full"
               loading="eager"
               fetchpriority="high"
             />
@@ -87,10 +97,70 @@ const facts = [
       )
     }
 
+    {
+      metrics && metrics.length > 0 && (
+        <div class="mx-auto max-w-5xl px-6 pt-14">
+          <dl class="reveal grid grid-cols-2 gap-6 border-y border-border py-8 sm:grid-cols-4">
+            {metrics.map((m) => (
+              <div>
+                <dt class="font-display text-2xl font-extrabold tracking-tight text-brass tabular-nums sm:text-3xl">
+                  {m.value}
+                </dt>
+                <dd class="mt-1.5 text-sm text-muted">{m.label}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      )
+    }
+
     <div class="mx-auto max-w-5xl px-6 py-16">
       <div class="prose reveal max-w-none">
         <Content />
       </div>
+
+      {
+        decisions && decisions.length > 0 && (
+          <section class="mt-14" aria-labelledby="decisions-title">
+            <h2 id="decisions-title" class="eyebrow reveal text-brass">
+              Key decisions
+            </h2>
+            <ol class="mt-6 grid gap-4 sm:grid-cols-2">
+              {decisions.map((d, i) => (
+                <li class="reveal rounded-xl border border-border bg-surface p-5">
+                  <p class="font-mono text-[11px] text-muted">{String(i + 1).padStart(2, "0")}</p>
+                  <h3 class="mt-2 font-display text-base font-bold tracking-tight">{d.title}</h3>
+                  <p class="mt-2 text-sm leading-relaxed text-muted">{d.body}</p>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )
+      }
+
+      {
+        gallery.length > 0 && (
+          <section class="mt-14" aria-labelledby="gallery-title">
+            <h2 id="gallery-title" class="eyebrow reveal text-brass">
+              More screens
+            </h2>
+            <div class="mt-6 grid gap-6 md:grid-cols-2">
+              {gallery.map((shot, i) => (
+                <div class="reveal overflow-hidden rounded-xl border border-border">
+                  <Image
+                    src={shot}
+                    alt={`${title}, screen ${i + 2}`}
+                    widths={[480, 800, 1200]}
+                    sizes="(min-width: 1024px) 476px, (min-width: 768px) calc(50vw - 36px), calc(100vw - 48px)"
+                    class="w-full"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        )
+      }
 
       <div class="reveal mt-12 flex flex-wrap items-center gap-2">
         {
@@ -117,7 +187,7 @@ const facts = [
       }
     </div>
 
-    <!-- Next project keeps people moving through the work instead of bouncing -->
+    {/* Next project keeps people moving through the work instead of bouncing */}
     <nav class="border-t border-border" aria-label="Next project">
       <a
         href={`/work/${next.id}/`}

@@ -1,0 +1,128 @@
+---
+// Stands in for a screenshot when the site behind a project is gone: a
+// wireframe of the kind of interface it was, drawn as a frame on the canvas.
+// Pure SVG with presentation attributes, so nothing here needs a style attribute.
+export type PosterKind = "dashboard" | "charts" | "document" | "storefront" | "mobile";
+
+interface Props {
+  title: string;
+  kind: PosterKind;
+}
+
+const { title, kind } = Astro.props;
+
+// Two voices from the palette, alternated so neighbouring posters differ
+const accent = kind === "charts" || kind === "storefront" ? "text-plum" : "text-brass";
+---
+
+<div class="poster canvas-grid relative grid size-full place-items-center" aria-hidden="true">
+  <span class="eyebrow absolute top-3 left-4 text-[10px]">Frame · {title}</span>
+
+  <svg
+    class={`h-[78%] w-auto transition-transform duration-700 ease-out group-hover:scale-[1.04] ${accent}`}
+    viewBox="0 0 320 200"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.25"
+    stroke-linecap="round"
+  >
+    {
+      kind === "mobile" ? (
+        <g>
+          {/* Desk view behind, the same screen at a wider width */}
+          <rect x="18" y="26" width="200" height="140" rx="7" opacity="0.35" />
+          <path d="M18 42h200" opacity="0.35" />
+          <path d="M34 62h70M34 78h110M34 94h90M34 110h120" opacity="0.25" />
+          <rect x="196" y="14" width="96" height="174" rx="14" class="fill-[var(--surface)]" />
+          <path d="M228 24h32" />
+          {[46, 74, 102, 130].map((y, i) => (
+            <g>
+              <circle cx="214" cy={y + 8} r="6" fill={i < 3 ? "currentColor" : "none"} fill-opacity="0.85" />
+              <path d={`M228 ${y + 4}h44M228 ${y + 12}h28`} opacity="0.6" />
+            </g>
+          ))}
+          <rect x="208" y="160" width="72" height="16" rx="8" fill="currentColor" fill-opacity="0.85" />
+        </g>
+      ) : (
+        <g>
+          <rect x="20" y="16" width="280" height="168" rx="8" class="fill-[var(--surface)]" />
+          <path d="M20 34h280" />
+          <circle cx="32" cy="25" r="2.5" opacity="0.5" />
+          <circle cx="41" cy="25" r="2.5" opacity="0.5" />
+          <circle cx="50" cy="25" r="2.5" opacity="0.5" />
+
+          {kind === "dashboard" && (
+            <g>
+              <path d="M80 34v150" opacity="0.5" />
+              <path d="M32 50h34M32 64h28M32 78h32M32 92h24" opacity="0.6" />
+              <rect x="30" y="45" width="42" height="10" rx="3" fill="currentColor" fill-opacity="0.18" stroke="none" />
+              {[92, 162, 232].map((x) => (
+                <g>
+                  <rect x={x} y="46" width="58" height="34" rx="4" />
+                  <path d={`M${x + 8} 58h20`} opacity="0.6" />
+                  <path d={`M${x + 8} 70h34`} stroke-width="3" />
+                </g>
+              ))}
+              {[94, 110, 126, 142, 158].map((y, i) => (
+                <g>
+                  <path d={`M92 ${y}h198`} opacity="0.25" />
+                  <path d={`M98 ${y + 9}h40M160 ${y + 9}h60`} opacity="0.6" />
+                  <rect x="254" y={y + 4} width="28" height="9" rx="4.5" fill="currentColor" fill-opacity={i % 2 ? 0.2 : 0.7} stroke="none" />
+                </g>
+              ))}
+            </g>
+          )}
+
+          {kind === "charts" && (
+            <g>
+              <path d="M36 52h60M36 64h36" opacity="0.6" />
+              <rect x="36" y="78" width="180" height="92" rx="4" opacity="0.5" />
+              <path d="M44 150l26-18 22 10 26-30 24 12 28-34 30 14" stroke-width="2" />
+              <path d="M44 150l26-18 22 10 26-30 24 12 28-34 30 14v40H44z" fill="currentColor" fill-opacity="0.12" stroke="none" />
+              {[0, 1, 2].map((i) => (
+                <g>
+                  <rect x="228" y={52 + i * 40} width="60" height="32" rx="4" />
+                  <path d={`M236 ${62 + i * 40}h24`} opacity="0.6" />
+                  <path d={`M236 ${74 + i * 40}h${30 + i * 8}`} stroke-width="3" />
+                </g>
+              ))}
+            </g>
+          )}
+
+          {kind === "document" && (
+            <g>
+              <rect x="36" y="46" width="160" height="128" rx="2" opacity="0.6" />
+              <path d="M50 62h90M50 74h120M50 86h104" opacity="0.5" />
+              <rect x="50" y="100" width="132" height="54" opacity="0.6" />
+              <path d="M50 118h132M50 136h132M94 100v54M138 100v54" opacity="0.4" />
+              <path d="M208 34v150" />
+              <path d="M220 50h50" opacity="0.6" />
+              {[64, 92, 120].map((y) => (
+                <g>
+                  <path d={`M220 ${y}h30`} opacity="0.5" />
+                  <rect x="220" y={y + 6} width="66" height="14" rx="3" />
+                </g>
+              ))}
+              <rect x="220" y="152" width="66" height="18" rx="9" fill="currentColor" fill-opacity="0.85" stroke="none" />
+            </g>
+          )}
+
+          {kind === "storefront" && (
+            <g>
+              <path d="M36 50h40" stroke-width="3" />
+              <circle cx="280" cy="50" r="7" />
+              <circle cx="286" cy="44" r="4" fill="currentColor" stroke="none" />
+              {[0, 1, 2, 3].map((i) => (
+                <g>
+                  <rect x={36 + i * 64} y="66" width="54" height="56" rx="4" fill="currentColor" fill-opacity={0.08 + i * 0.05} />
+                  <path d={`M${36 + i * 64} 134h40M${36 + i * 64} 146h24`} opacity="0.6" />
+                  <path d={`M${36 + i * 64} 160h18`} stroke-width="3" />
+                </g>
+              ))}
+            </g>
+          )}
+        </g>
+      )
+    }
+  </svg>
+</div>
