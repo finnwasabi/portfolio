@@ -16,13 +16,14 @@ What that decision bought:
 
 | | |
 |---|---|
-| Total build output | 84 KB before images |
-| Home page, compressed | 6.2 KB |
-| JavaScript shipped | ~2 KB, only for the hero interaction |
+| Total build output | 818 KB before images, 509 KB of it fonts: 18 subset files, of which a visitor fetches three |
+| Home page, compressed | 25.6 KB with zstd. A third of the 97 KB raw is the tool logos, inlined as SVG |
+| JavaScript shipped | 4.6 KB (2.7 KB gzipped) in seven small modules on the home page, no framework runtime |
 | Server memory | 0 MB. Caddy reads the files off disk |
 
-The screenshots go through Astro's image pipeline and come out as WebP, which takes the
-largest one from 952 KB down to 34 KB.
+The screenshots go through Astro's image pipeline and come out as WebP in three widths, so the
+browser picks the one that fits. The largest source, a 1,909 KB PNG, reaches a standard-density
+desktop screen as a 22 KB card, and as 146 KB at full width on its case study.
 
 ## Stack
 
@@ -30,7 +31,8 @@ largest one from 952 KB down to 34 KB.
 - **TypeScript** throughout, with a Zod schema validating every case study's frontmatter, so a
   typo in a field name fails the build instead of rendering an empty page
 - **Tailwind CSS 4** with a token layer, so the whole palette is a handful of custom properties
-- **Fontsource** to self-host Unbounded, Inter and JetBrains Mono rather than depend on a font CDN
+- **Fontsource** to self-host Unbounded, Inter and JetBrains Mono rather than depend on a font CDN,
+  with the Unbounded and Inter latin files preloaded so headings do not reflow when they arrive
 
 ## The hero
 
@@ -45,8 +47,8 @@ devices that report `hover: hover`, and it respects `prefers-reduced-motion`.
 src/
   data/site.ts          Name, intro, experience, skills. Most edits happen here
   content/work/*.md     One file per case study, ordered by the `order` field
-  components/           Hero, work card
-  pages/                Home, and one generated page per case study
+  components/           Hero, work card, marquee, toolbox, open source list, copy email
+  pages/                Home, 404, the Snapzy privacy policy, and one page per case study
   assets/work/*.png     Screenshots, matched to a case study by filename
 ```
 
