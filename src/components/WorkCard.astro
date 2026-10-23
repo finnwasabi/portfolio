@@ -50,7 +50,7 @@ const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
       )
     }
 
-    <!-- Sits over the image, slides up on hover -->
+    {/* Sits over the image, slides up on hover */}
     <span
       class="absolute right-3 bottom-3 translate-y-2 rounded-full bg-brass px-3 py-1 font-mono text-[10px] tracking-wider text-bg uppercase opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100"
     >
@@ -59,8 +59,8 @@ const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
   </div>
 
   <div class="p-6">
-    <!-- Stacked while the card is narrow so the title owns its line; one row once
-         the card itself is wide enough for the date to sit opposite it. -->
+    {/* Stacked while the card is narrow so the title owns its line; one row once
+         the card itself is wide enough for the date to sit opposite it. */}
     <div class="flex flex-col gap-1 @[24rem]:flex-row @[24rem]:items-baseline @[24rem]:justify-between @[24rem]:gap-4">
       <h3 class="font-display text-xl font-bold tracking-tight transition-colors group-hover:text-brass">
         {title}
@@ -83,9 +83,9 @@ const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
         }
       </div>
 
-      <!-- Left aligned in a narrow card, opposite the chips once there is room.
+      {/* Left aligned in a narrow card, opposite the chips once there is room.
            The count stays glued to its unit so a wrap never strands "4" from
-           "people" on the next line. -->
+           "people" on the next line. */}
       <span class="eyebrow @[27rem]:ml-auto">
         {client}
         {teamSize ? <span class="whitespace-nowrap">{` · ${teamSize} people`}</span> : ""}

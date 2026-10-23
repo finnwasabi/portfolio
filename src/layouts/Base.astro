@@ -65,8 +65,8 @@ const preview = new URL(image, site.url).href;
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={preview} />
 
-    <!-- Follows the system scheme until the visitor picks one; the toggle script
-         below then rewrites both so the browser bar matches the page. -->
+    {/* Follows the system scheme until the visitor picks one; the toggle script
+         below then rewrites both so the browser bar matches the page. */}
     <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#120e1a" media="(prefers-color-scheme: dark)" />
     <meta name="author" content={site.name} />
@@ -76,7 +76,7 @@ const preview = new URL(image, site.url).href;
     <link rel="preload" href={unboundedLatin} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
 
-    <!-- CANH BAO: noi dung script nay duoc bam va ghim vao Content-Security-Policy
+    {/* CANH BAO: noi dung script nay duoc bam va ghim vao Content-Security-Policy
          trong Caddyfile tren may chu (khoi tungln.is-a.dev). Sua mot ky tu la ma bam
          doi, va trinh duyet se lang le tu choi chay no: giao dien sang toi thoi nho
          lua chon, khong bao gi trong console. Buoc "Check the inline script hash" trong
@@ -84,7 +84,7 @@ const preview = new URL(image, site.url).href;
 
          Van phai de is:inline: no can chay TRUOC khi trang ve lan dau, neu khong nguoi
          dung da chon nen toi se thay mot nhay nen sang. Moi script khac trong trang deu
-         da duoc day ra file ngoai de CSP chi can script-src 'self'. -->
+         da duoc day ra file ngoai de CSP chi can script-src 'self'. */}
     <script is:inline>
       document.documentElement.classList.add("js");
       const saved = localStorage.getItem("theme");
@@ -107,7 +107,7 @@ const preview = new URL(image, site.url).href;
       })}
     />
 
-    <!-- Thong ke luot xem, chay bang Umami tu host tren VPS. Khong cookie, khong ho so
+    {/* Thong ke luot xem, chay bang Umami tu host tren VPS. Khong cookie, khong ho so
          theo doi ca nhan, nen khong can banner dong y.
 
          GHIM: src la duong dan cung goc chu khong phai finnumami.duckdns.org. Caddy tren
@@ -115,7 +115,7 @@ const preview = new URL(image, site.url).href;
          script-src 'self' va connect-src 'self' nguyen ven, va trinh chan quang cao khong
          cat mat so lieu vi duong dan nam ngay tren ten mien nay.
 
-         Script nay o file ngoai nen khong dinh vao ma bam noi tuyen trong Caddyfile. -->
+         Script nay o file ngoai nen khong dinh vao ma bam noi tuyen trong Caddyfile. */}
     <script defer src="/stats.js" data-website-id="3b9f6c78-6682-4c65-8c6b-ada2fb9a21cb"></script>
   </head>
 
@@ -134,9 +134,9 @@ const preview = new URL(image, site.url).href;
           LNT<span class="text-brass">.</span>
         </a>
 
-        <!-- Three links fit on a 320px screen with the gap tightened, so they all
+        {/* Three links fit on a 320px screen with the gap tightened, so they all
              stay visible. A hamburger would hide the whole nav behind a tap to
-             save room that is not needed. -->
+             save room that is not needed. */}
         <div class="flex items-center gap-4 text-sm sm:gap-6">
           {
             nav.map((n) => (
@@ -150,8 +150,8 @@ const preview = new URL(image, site.url).href;
             ))
           }
 
-          <!-- Both icons are in the markup and CSS picks one, so the right glyph is
-               there on first paint without waiting for a script. -->
+          {/* Both icons are in the markup and CSS picks one, so the right glyph is
+               there on first paint without waiting for a script. */}
           <button
             id="theme-toggle"
             type="button"
@@ -216,9 +216,9 @@ const preview = new URL(image, site.url).href;
       </div>
     </footer>
 
-    <!-- Khong dung is:inline: script nay chi gan mot event listener, chay sau khi
+    {/* Khong dung is:inline: script nay chi gan mot event listener, chay sau khi
          DOM san sang la du. De Astro dong goi ra file ngoai thi Content-Security-Policy
-         chi can script-src 'self', khong phai bam noi dung. -->
+         chi can script-src 'self', khong phai bam noi dung. */}
     <script>
       const root = document.documentElement;
       const toggle = document.getElementById("theme-toggle");

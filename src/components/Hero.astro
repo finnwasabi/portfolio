@@ -17,8 +17,8 @@ const layerProps = (pairs: [string, string][]) =>
 ---
 
 <section class="canvas-grid relative overflow-x-clip border-b border-border">
-  <!-- Ambient light that drifts toward the pointer. Deliberately faint: it is
-       atmosphere, not decoration you should notice. -->
+  {/* Ambient light that drifts toward the pointer. Deliberately faint: it is
+       atmosphere, not decoration you should notice. */}
   <div
     id="glow"
     class="pointer-events-none absolute -top-40 left-1/2 -z-10 size-[42rem] -translate-x-1/2 rounded-full opacity-60 blur-[90px] transition-transform duration-700 ease-out"
@@ -27,7 +27,7 @@ const layerProps = (pairs: [string, string][]) =>
   </div>
 
   <div class="mx-auto max-w-5xl px-6 pt-16 pb-20 sm:pt-24 sm:pb-28">
-    <!-- The artboard. Hovering any child reveals its layer name and size. -->
+    {/* The artboard. Hovering any child reveals its layer name and size. */}
     <div id="artboard" class="relative">
       <span
         class="eyebrow rise absolute -top-8 right-0 hidden items-center gap-1.5 sm:flex"
@@ -47,8 +47,8 @@ const layerProps = (pairs: [string, string][]) =>
         </svg>
       </span>
 
-      <!-- Two lines on a phone. The separator dot only earns its place once the
-           two halves actually share a line. -->
+      {/* Two lines on a phone. The separator dot only earns its place once the
+           two halves actually share a line. */}
       <p
         class="eyebrow rise flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2"
         style="animation-delay: 120ms"
@@ -65,11 +65,11 @@ const layerProps = (pairs: [string, string][]) =>
         <span>{site.location}</span>
       </p>
 
-      <!-- The name keeps the full 976px so it stays on one line, and it never
-           needs more than 708px of that, which leaves the panel its column. -->
+      {/* The name keeps the full 976px so it stays on one line, and it never
+           needs more than 708px of that, which leaves the panel its column. */}
       <div class="relative mt-5">
-        <!-- w-fit shrinks the box to the glyphs, so the inspector outline hugs
-             the name instead of running under the panel beside it -->
+        {/* w-fit shrinks the box to the glyphs, so the inspector outline hugs
+             the name instead of running under the panel beside it */}
         <h1
           class="rise w-fit pb-[0.06em] font-display text-[clamp(2.75rem,8vw,5.5rem)] leading-[1.02] font-extrabold tracking-[-0.03em]"
           style="animation-delay: 200ms"
@@ -84,7 +84,7 @@ const layerProps = (pairs: [string, string][]) =>
           Le Nhat Tung
         </h1>
 
-        <!-- Right padding is the panel's column, kept clear from lg up -->
+        {/* Right padding is the panel's column, kept clear from lg up */}
         <div class="lg:pr-[17rem]">
           <p
             class="rise mt-8 text-lg leading-relaxed text-muted"
@@ -131,9 +131,9 @@ const layerProps = (pairs: [string, string][]) =>
           </div>
         </div>
 
-        <!-- The counterpart to the layer inspector: sits vertically centred on
+        {/* The counterpart to the layer inspector: sits vertically centred on
              the whole name-to-buttons block, and swaps to whichever layer the
-             pointer is over. Hidden on touch, where nothing can be hovered. -->
+             pointer is over. Hidden on touch, where nothing can be hovered. */}
         <aside
           id="props"
           class="rise hidden rounded-xl border border-border bg-surface/60 p-5 backdrop-blur-sm lg:absolute lg:top-1/2 lg:right-0 lg:block lg:w-60 lg:-translate-y-1/2"
@@ -153,7 +153,7 @@ const layerProps = (pairs: [string, string][]) =>
         </aside>
       </div>
 
-      <!-- Selection marker, positioned by script -->
+      {/* Selection marker, positioned by script */}
       <div
         id="marker"
         class="pointer-events-none absolute top-0 left-0 hidden rounded-[3px] border border-brass"

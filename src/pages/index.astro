@@ -32,7 +32,7 @@ const filters = [...tagCounts]
     items={["Front-end", "Interfaces", "Design systems", "Performance", "Accessibility"]}
   />
 
-  <!-- What I work on -->
+  {/* What I work on */}
   <section class="mx-auto max-w-5xl px-6 py-20">
     <h2 class="eyebrow reveal">What I work on</h2>
     <div class="mt-8 grid gap-10 sm:grid-cols-3">
@@ -48,15 +48,15 @@ const filters = [...tagCounts]
     </div>
   </section>
 
-  <!-- Work -->
+  {/* Work */}
   <section id="work" class="mx-auto max-w-5xl px-6 py-12">
     <div class="reveal flex items-baseline justify-between">
       <h2 class="eyebrow">Selected work</h2>
       <span class="eyebrow" id="work-count" aria-live="polite">{work.length} projects</span>
     </div>
 
-    <!-- Only shown once the script is running: without it every card is already
-         visible, and buttons that do nothing would be worse than no buttons. -->
+    {/* Only shown once the script is running: without it every card is already
+         visible, and buttons that do nothing would be worse than no buttons. */}
     <div
       id="work-filters"
       class="work-filters reveal mt-6 flex flex-wrap gap-2"
@@ -84,7 +84,7 @@ const filters = [...tagCounts]
 
   <OpenSource />
 
-  <!-- Experience -->
+  {/* Experience */}
   <section id="about" class="mx-auto max-w-5xl px-6 py-20">
     <h2 class="eyebrow reveal">Experience</h2>
 
@@ -138,12 +138,12 @@ const filters = [...tagCounts]
     </div>
   </section>
 
-  <!-- Outside work -->
+  {/* Outside work */}
   <section class="mx-auto max-w-5xl px-6 py-12">
     <div class="reveal rounded-2xl border border-border bg-surface p-8 sm:p-10">
       <h2 class="eyebrow">{homelab.title}</h2>
-      <!-- Runs the full width of the card on purpose, so the paragraph and the
-           stats row below it share one edge instead of ending 300px apart. -->
+      {/* Runs the full width of the card on purpose, so the paragraph and the
+           stats row below it share one edge instead of ending 300px apart. */}
       <p class="mt-4 leading-relaxed text-muted">{homelab.body}</p>
 
       <dl class="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-4">
@@ -161,7 +161,7 @@ const filters = [...tagCounts]
     </div>
   </section>
 
-  <!-- Contact -->
+  {/* Contact */}
   <section id="contact" class="mx-auto max-w-5xl px-6 pb-8">
     <div
       class="reveal canvas-grid relative overflow-hidden rounded-3xl border border-border bg-surface p-10 sm:p-14"
