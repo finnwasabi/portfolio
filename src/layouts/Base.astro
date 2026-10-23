@@ -18,9 +18,17 @@ interface Props {
   image?: string;
   /** Case studies are articles; the home page is a website */
   type?: "website" | "article";
+  /** For pages with no address of their own, like the 404 served at any missing path */
+  noindex?: boolean;
 }
 
-const { title, description = site.metaDescription, image = "/og.png", type = "website" } = Astro.props;
+const {
+  title,
+  description = site.metaDescription,
+  image = "/og.png",
+  type = "website",
+  noindex = false,
+} = Astro.props;
 const pageTitle = title ? `${title} - ${site.name}` : `${site.name} - ${site.role}`;
 const nav = [
   { id: "work", label: "Work" },
@@ -39,7 +47,7 @@ const preview = new URL(image, site.url).href;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
 
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={site.name} />
