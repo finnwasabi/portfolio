@@ -189,6 +189,18 @@ const filters = [...tagCounts]
           <span aria-hidden="true">→</span>
         </a>
         <CopyEmail />
+        {
+          site.cv && (
+            <a
+              href={site.cv}
+              download
+              class="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium transition hover:border-brass hover:text-brass"
+            >
+              Download CV
+              <span aria-hidden="true">↓</span>
+            </a>
+          )
+        }
       </div>
     </div>
   </section>

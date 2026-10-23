@@ -138,6 +138,18 @@ const layerProps = (pairs: [string, string][]) =>
             >
               Get in touch
             </a>
+            {
+              site.cv && (
+                <a
+                  href={site.cv}
+                  download
+                  class="inline-flex items-center gap-2 rounded-full px-3 py-2.5 text-sm font-medium text-muted transition hover:text-brass"
+                >
+                  Download CV
+                  <span aria-hidden="true">↓</span>
+                </a>
+              )
+            }
           </div>
         </div>
 

@@ -134,9 +134,23 @@ const preview = new URL(image, site.url).href;
 
     <header class="site-header sticky top-0 z-40 border-b border-border/60 bg-bg/80 backdrop-blur-md">
       <nav class="mx-auto flex h-16 max-w-5xl items-center justify-between px-6" aria-label="Main">
-        <a href="/" class="font-display text-base font-bold tracking-tight hover:text-brass">
-          LNT<span class="text-brass">.</span>
-        </a>
+        <div class="flex items-center gap-3">
+          <a href="/" class="font-display text-base font-bold tracking-tight hover:text-brass">
+            LNT<span class="text-brass">.</span>
+          </a>
+          {
+            site.availability.open && (
+              <a
+                href="/#contact"
+                class="inline-flex items-center gap-1.5 rounded-full border border-border px-2 py-1 font-mono text-[10px] tracking-wide text-muted uppercase transition-colors hover:border-brass hover:text-text sm:px-2.5"
+              >
+                <span class="availability-dot" aria-hidden="true" />
+                {/* A dot alone on a phone, where the nav needs the room */}
+                <span class="sr-only sm:not-sr-only">{site.availability.label}</span>
+              </a>
+            )
+          }
+        </div>
 
         {/* Three links fit on a 320px screen with the gap tightened, so they all
              stay visible. A hamburger would hide the whole nav behind a tap to

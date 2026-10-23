@@ -16,6 +16,11 @@ export const site = {
   // Search results cut off around 155 characters; the long intro is for the page itself
   metaDescription:
     "Front-end developer in Ho Chi Minh City. Four years building production interfaces with React, Next.js and Refine, plus seven Strapi plugins on npm.",
+  // Flip `open` to show an "Open to work" badge in the header; `label` is what it says.
+  availability: { open: false, label: "Open to work" },
+  // Drop a PDF in public/ and set its path (e.g. "/le-nhat-tung-cv.pdf") to show a
+  // download button in the hero and the contact card. Empty hides both.
+  cv: "",
   intro:
     "I build web interfaces that hold up in production. Four years spent turning Figma files into fast, accessible, maintainable front-ends for booking platforms, e-commerce and enterprise products.",
 };

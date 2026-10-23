@@ -247,6 +247,35 @@ html.js .reveal.is-in {
   font-weight: 600;
 }
 
+/* "Open to work" badge: a green dot with a slow ring, still under reduced motion */
+.availability-dot {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #2f9e5b;
+}
+.availability-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  animation: availability-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes availability-ping {
+  75%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .availability-dot::after {
+    animation: none;
+  }
+}
+
 /* A grid that only exists where the pointer is. Two layers: fine lines for texture
    and a heavier dot where lines cross, both revealed through a mask that follows
    the cursor. Nothing animates on scroll, only two custom properties change. */
