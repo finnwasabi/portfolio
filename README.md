@@ -55,6 +55,14 @@ src/
 Adding a project means dropping a markdown file in `content/work/` and, if the site is still
 up, a screenshot named after it. Nothing else to wire up.
 
+A case study can carry more when there is more to show. Each block only appears once filled:
+
+- `metrics` in the frontmatter, up to four `{ value, label }` pairs, shown as a strip under the cover
+- `decisions`, a list of `{ title, body }`, shown as numbered cards after the write-up
+- more screenshots in `assets/work/<slug>/`, shown as a gallery in filename order
+- `poster` (`dashboard`, `charts`, `document`, `storefront` or `mobile`) picks the wireframe drawn
+  on the card when there is no screenshot at all
+
 ## Running it
 
 ```bash

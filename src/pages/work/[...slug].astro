@@ -17,11 +17,22 @@ export async function getStaticPaths() {
 
 const { entry, next } = Astro.props;
 const { Content } = await render(entry);
-const { title, client, role, period, stack, teamSize, summary, href } = entry.data;
+const { title, client, role, period, stack, teamSize, summary, href, metrics, decisions } =
+  entry.data;
 
 const shots = import.meta.glob<{ default: ImageMetadata }>("/src/assets/work/*.png", {
   eager: true,
 });
+// More screens go in src/assets/work/<slug>/ and show as a gallery after the
+// write-up, in filename order. Nothing to declare in the frontmatter.
+const extraShots = import.meta.glob<{ default: ImageMetadata }>("/src/assets/work/*/*.{png,jpg,jpeg,webp}", {
+  eager: true,
+});
+const gallery = Object.entries(extraShots)
+  .filter(([path]) => path.startsWith(`/src/assets/work/${entry.id}/`))
+  .sort(([a], [b]) => a.localeCompare(b, "en", { numeric: true }))
+  .map(([, mod]) => mod.default);
+
 // The cover is the largest paint on the page. It rises in with CSS rather than
 // .reveal, which waits for a script before the image may show, and it is fetched
 // ahead of the fonts.
@@ -87,10 +98,70 @@ const facts = [
       )
     }
 
+    {
+      metrics && metrics.length > 0 && (
+        <div class="mx-auto max-w-5xl px-6 pt-14">
+          <dl class="reveal grid grid-cols-2 gap-6 border-y border-border py-8 sm:grid-cols-4">
+            {metrics.map((m) => (
+              <div>
+                <dt class="font-display text-2xl font-extrabold tracking-tight text-brass tabular-nums sm:text-3xl">
+                  {m.value}
+                </dt>
+                <dd class="mt-1.5 text-sm text-muted">{m.label}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      )
+    }
+
     <div class="mx-auto max-w-5xl px-6 py-16">
       <div class="prose reveal max-w-none">
         <Content />
       </div>
+
+      {
+        decisions && decisions.length > 0 && (
+          <section class="mt-14" aria-labelledby="decisions-title">
+            <h2 id="decisions-title" class="eyebrow reveal text-brass">
+              Key decisions
+            </h2>
+            <ol class="mt-6 grid gap-4 sm:grid-cols-2">
+              {decisions.map((d, i) => (
+                <li class="reveal rounded-xl border border-border bg-surface p-5">
+                  <p class="font-mono text-[11px] text-muted">{String(i + 1).padStart(2, "0")}</p>
+                  <h3 class="mt-2 font-display text-base font-bold tracking-tight">{d.title}</h3>
+                  <p class="mt-2 text-sm leading-relaxed text-muted">{d.body}</p>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )
+      }
+
+      {
+        gallery.length > 0 && (
+          <section class="mt-14" aria-labelledby="gallery-title">
+            <h2 id="gallery-title" class="eyebrow reveal text-brass">
+              More screens
+            </h2>
+            <div class="mt-6 grid gap-6 md:grid-cols-2">
+              {gallery.map((shot, i) => (
+                <div class="reveal overflow-hidden rounded-xl border border-border">
+                  <Image
+                    src={shot}
+                    alt={`${title}, screen ${i + 2}`}
+                    widths={[480, 800, 1200]}
+                    sizes="(min-width: 1024px) 476px, (min-width: 768px) calc(50vw - 36px), calc(100vw - 48px)"
+                    class="w-full"
+                    loading="lazy"
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        )
+      }
 
       <div class="reveal mt-12 flex flex-wrap items-center gap-2">
         {
