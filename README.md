@@ -16,9 +16,9 @@ What that decision bought:
 
 | | |
 |---|---|
-| Total build output | 818 KB before images, 509 KB of it fonts: 18 subset files, of which a visitor fetches three |
-| Home page, compressed | 25.6 KB with zstd. A third of the 97 KB raw is the tool logos, inlined as SVG |
-| JavaScript shipped | 4.6 KB (2.7 KB gzipped) in seven small modules on the home page, no framework runtime |
+| Total build output | 812 KB before images, 509 KB of it fonts: 18 subset files, of which a visitor fetches three |
+| Home page, compressed | 25.3 KB with zstd. A third of the 98 KB raw is the tool logos, inlined as SVG |
+| JavaScript shipped | 9.9 KB (5.1 KB gzipped) in nine small files on the home page, no framework runtime |
 | Server memory | 0 MB. Caddy reads the files off disk |
 
 The screenshots go through Astro's image pipeline and come out as WebP in three widths, so the
