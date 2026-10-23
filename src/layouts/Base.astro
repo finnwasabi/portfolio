@@ -250,13 +250,41 @@ const preview = new URL(image, site.url).href;
 
       toggle?.addEventListener("click", () => {
         const next = effective() === "dark" ? "light" : "dark";
-        root.dataset.theme = next;
-        try {
-          localStorage.setItem("theme", next);
-        } catch {
-          // Private windows can refuse storage; the switch still works for this visit
+        const apply = () => {
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem("theme", next);
+          } catch {
+            // Private windows can refuse storage; the switch still works for this visit
+          }
+          sync();
+        };
+
+        if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          apply();
+          return;
         }
-        sync();
+
+        // The new theme spreads out from the button as a circle. theme-switching
+        // turns off the page-to-page transition names for the moment, so the
+        // header and a cover are swept by the circle instead of fading on their own.
+        root.classList.add("theme-switching");
+        const transition = document.startViewTransition(apply);
+        transition.ready.then(() => {
+          const r = toggle.getBoundingClientRect();
+          const x = r.left + r.width / 2;
+          const y = r.top + r.height / 2;
+          const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+          root.animate(
+            { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+            {
+              duration: 560,
+              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+              pseudoElement: "::view-transition-new(root)",
+            },
+          );
+        });
+        transition.finished.finally(() => root.classList.remove("theme-switching"));
       });
     </script>
 

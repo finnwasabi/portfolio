@@ -315,6 +315,17 @@ body > footer {
   display: block;
 }
 
+/* Theme switch: the circle drawn from the toggle replaces the default fade */
+html.theme-switching .site-header,
+html.theme-switching .case-cover {
+  view-transition-name: none;
+}
+html.theme-switching::view-transition-old(root),
+html.theme-switching::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 /* The marquee under the hero. Kept here rather than in Marquee.astro: a component
    style block becomes its own render-blocking stylesheet on the home page, since
    inlineStylesheets is off for the CSP. */
