@@ -322,8 +322,22 @@ const preview = new URL(image, site.url).href;
       //      #hash link that jumps down the page does not strand what it skipped;
       //   2. a scroll pass catches elements the observer missed when the page is
       //      scrolled faster than it can report intersections.
+      // Browsers that support scroll-driven animations reveal in CSS instead
+      // (global.css). Reduced motion is covered there too: it shows everything.
+      // Safety net 1 still applies there: without it, a section near the bottom
+      // edge at load would sit half faded until the page is scrolled.
       const items = new Set(document.querySelectorAll(".reveal"));
-      if (items.size) {
+      const scrollDriven = CSS.supports("animation-timeline: view()");
+      if (items.size && scrollDriven) {
+        // The 18px allows for the lift: a box whose layout sits just inside the
+        // edge measures just outside it while it is still translated down
+        requestAnimationFrame(() => {
+          for (const el of items) {
+            if (el.getBoundingClientRect().top < window.innerHeight + 18) el.classList.add("is-in");
+          }
+        });
+      }
+      if (items.size && !scrollDriven) {
         const show = (el: Element) => {
           el.classList.add("is-in");
           items.delete(el);

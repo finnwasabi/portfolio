@@ -130,6 +130,41 @@ html.js .reveal.is-in {
   transform: none;
 }
 
+/* Where the browser can tie an animation to scroll position, the reveal runs on
+   the compositor with no script at all: each section settles in over the first
+   220px of its entry into the viewport. Anything well inside the screen at load is past
+   that range, so it simply shows. The observer in Base.astro stands down when this
+   applies and stays the fallback everywhere else. The range is a fixed 220px
+   rather than a share of the element, so a long case study body is not left
+   half transparent while someone reads its first paragraphs. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    html.js .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      animation: reveal-in linear both;
+    }
+    /* A separate, slightly stronger rule on purpose: the minifier folds a
+       timeline declared next to the shorthand into it, and browsers drop an
+       animation shorthand that carries view(). */
+    :root.js .reveal {
+      animation-timeline: view();
+      animation-range: entry 0px entry 220px;
+    }
+    /* Already on screen at load (marked from Base.astro): shown in full */
+    :root.js .reveal.is-in {
+      animation: none;
+    }
+  }
+}
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
 /* Hero lines lift in one after another on first paint. */
 @keyframes rise {
   from {
