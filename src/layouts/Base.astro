@@ -1,6 +1,15 @@
 ---
 import "../styles/global.css";
 import { site } from "../data/site";
+// The browser only finds a font once the stylesheet is parsed, so the first paint
+// waited on two round trips in a row. Preloading the two faces every page shows
+// above the fold (headings, body) starts them alongside the stylesheet. Latin only:
+// the copy is English, and unicode-range keeps the other subsets from loading at
+// all. JetBrains Mono is left to load normally; it only sets small labels, and a
+// third preload would compete with a case study cover. These are the same files
+// the @font-face rules point at, so Vite emits each once under one hash.
+import unboundedLatin from "@fontsource-variable/unbounded/files/unbounded-latin-wght-normal.woff2?url";
+import interLatin from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 
 interface Props {
   title?: string;
@@ -9,9 +18,17 @@ interface Props {
   image?: string;
   /** Case studies are articles; the home page is a website */
   type?: "website" | "article";
+  /** For pages with no address of their own, like the 404 served at any missing path */
+  noindex?: boolean;
 }
 
-const { title, description = site.metaDescription, image = "/og.png", type = "website" } = Astro.props;
+const {
+  title,
+  description = site.metaDescription,
+  image = "/og.png",
+  type = "website",
+  noindex = false,
+} = Astro.props;
 const pageTitle = title ? `${title} - ${site.name}` : `${site.name} - ${site.role}`;
 const nav = [
   { id: "work", label: "Work" },
@@ -30,7 +47,7 @@ const preview = new URL(image, site.url).href;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
 
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={site.name} />
@@ -55,6 +72,9 @@ const preview = new URL(image, site.url).href;
     <meta name="author" content={site.name} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <link rel="preload" href={unboundedLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
 
     <!-- CANH BAO: noi dung script nay duoc bam va ghim vao Content-Security-Policy
          trong Caddyfile tren may chu (khoi tungln.is-a.dev). Sua mot ky tu la ma bam

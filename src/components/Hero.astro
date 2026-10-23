@@ -34,7 +34,14 @@ const layerProps = (pairs: [string, string][]) =>
         style="animation-delay: 60ms"
       >
         Hover to inspect
-        <svg class="size-3" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2">
+        <svg
+          class="size-3"
+          viewBox="0 0 12 12"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.2"
+          aria-hidden="true"
+        >
           <path d="M6 1v3M6 8v3M1 6h3M8 6h3"></path>
           <circle cx="6" cy="6" r="1.2"></circle>
         </svg>
@@ -106,7 +113,7 @@ const layerProps = (pairs: [string, string][]) =>
               ])}
             >
               See the work
-              <span class="transition-transform group-hover:translate-y-0.5">↓</span>
+              <span class="transition-transform group-hover:translate-y-0.5" aria-hidden="true">↓</span>
             </a>
             <a
               href={`mailto:${site.email}`}
