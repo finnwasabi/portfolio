@@ -22,6 +22,9 @@ const { title, client, role, period, stack, teamSize, summary, href } = entry.da
 const shots = import.meta.glob<{ default: ImageMetadata }>("/src/assets/work/*.png", {
   eager: true,
 });
+// The cover is the largest paint on the page. It rises in with CSS rather than
+// .reveal, which waits for a script before the image may show, and it is fetched
+// ahead of the fonts.
 const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
 
 // Link previews expect 1.91:1. Feeding them the raw 16:10 screenshot means the top
@@ -69,14 +72,15 @@ const facts = [
     {
       cover && (
         <div class="mx-auto max-w-5xl px-6">
-          <div class="reveal -mt-8 overflow-hidden rounded-2xl border border-border shadow-2xl shadow-black/20">
+          <div class="rise -mt-8 overflow-hidden rounded-2xl border border-border shadow-2xl shadow-black/20">
             <Image
               src={cover}
               alt={`${title} interface`}
               widths={[640, 1024, 1440]}
-              sizes="(max-width: 1024px) 100vw, 1024px"
+              sizes="(min-width: 1024px) 976px, calc(100vw - 48px)"
               class="w-full"
               loading="eager"
+              fetchpriority="high"
             />
           </div>
         </div>

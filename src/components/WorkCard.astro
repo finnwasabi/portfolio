@@ -12,6 +12,11 @@ const { title, client, period, summary, stack, teamSize } = entry.data;
 
 // Screenshots are named after the entry id, so adding one is just dropping a
 // file in. Projects whose site is gone fall back to a typographic poster.
+//
+// Every card loads lazily: the grid starts below the hero, the marquee and the
+// focus section even on a tall desktop, so an eager card only competes with the
+// fonts and stylesheet for the first paint. sizes mirrors the grid: one column
+// inside 24px gutters, then two columns with a 24px gap, capped by max-w-5xl.
 const shots = import.meta.glob<{ default: ImageMetadata }>("/src/assets/work/*.png", {
   eager: true,
 });
@@ -31,9 +36,9 @@ const cover = shots[`/src/assets/work/${entry.id}.png`]?.default;
           src={cover}
           alt={`${title} interface`}
           widths={[480, 800, 1200]}
-          sizes="(max-width: 768px) 100vw, 46vw"
+          sizes="(min-width: 1024px) 476px, (min-width: 768px) calc(50vw - 36px), calc(100vw - 48px)"
           class="size-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-          loading={index < 2 ? "eager" : "lazy"}
+          loading="lazy"
         />
       ) : (
         <div class="canvas-grid grid size-full place-items-center">
