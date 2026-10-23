@@ -69,6 +69,22 @@
   --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", monospace;
 }
 
+/* Headings break into even lines instead of leaving one word stranded, and body
+   copy avoids a lone last word. Both are hints: older browsers just wrap as before.
+   In the base layer so a utility on a single element can still override them. */
+@layer base {
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
+  }
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
