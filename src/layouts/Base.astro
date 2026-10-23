@@ -1,6 +1,15 @@
 ---
 import "../styles/global.css";
 import { site } from "../data/site";
+// The browser only finds a font once the stylesheet is parsed, so the first paint
+// waited on two round trips in a row. Preloading the two faces every page shows
+// above the fold (headings, body) starts them alongside the stylesheet. Latin only:
+// the copy is English, and unicode-range keeps the other subsets from loading at
+// all. JetBrains Mono is left to load normally; it only sets small labels, and a
+// third preload would compete with a case study cover. These are the same files
+// the @font-face rules point at, so Vite emits each once under one hash.
+import unboundedLatin from "@fontsource-variable/unbounded/files/unbounded-latin-wght-normal.woff2?url";
+import interLatin from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 
 interface Props {
   title?: string;
@@ -55,6 +64,9 @@ const preview = new URL(image, site.url).href;
     <meta name="author" content={site.name} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <link rel="preload" href={unboundedLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
 
     <!-- CANH BAO: noi dung script nay duoc bam va ghim vao Content-Security-Policy
          trong Caddyfile tren may chu (khoi tungln.is-a.dev). Sua mot ky tu la ma bam
