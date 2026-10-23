@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import Colophon from "../components/Colophon.astro";
 import { site } from "../data/site";
 // The browser only finds a font once the stylesheet is parsed, so the first paint
 // waited on two round trips in a row. Preloading the two faces every page shows
@@ -214,7 +215,7 @@ const preview = new URL(image, site.url).href;
 
     <footer class="mt-28 border-t border-border/60">
       <div
-        class="mx-auto flex max-w-5xl flex-col gap-3 px-6 py-9 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
+        class="mx-auto flex max-w-5xl flex-col gap-3 px-6 pt-9 pb-5 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
       >
         <p class="font-mono text-xs">© {new Date().getFullYear()} {site.name}</p>
         <div class="flex gap-5">
@@ -231,6 +232,9 @@ const preview = new URL(image, site.url).href;
             ))
           }
         </div>
+      </div>
+      <div class="mx-auto max-w-5xl px-6 pb-9">
+        <Colophon />
       </div>
     </footer>
 

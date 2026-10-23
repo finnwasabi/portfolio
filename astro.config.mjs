@@ -5,6 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 import sitemap from '@astrojs/sitemap';
 
+import pageWeight from './integrations/page-weight.mjs';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://tungln.is-a.dev',
@@ -23,5 +25,5 @@ export default defineConfig({
     },
   },
 
-  integrations: [sitemap()]
+  integrations: [sitemap(), pageWeight()]
 });
