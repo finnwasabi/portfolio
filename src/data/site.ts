@@ -154,3 +154,8 @@ export const education = [
     period: "2017 - 2019",
   },
 ];
+
+// What colleagues and clients have said. Real quotes only, with permission, and
+// the section stays off the page until there is at least one. Keep each to two
+// or three sentences; `href` can point at the person's LinkedIn.
+export const testimonials: { quote: string; name: string; role: string; href?: string }[] = [];

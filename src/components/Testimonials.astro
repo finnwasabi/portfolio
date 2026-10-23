@@ -1,0 +1,38 @@
+---
+import { testimonials } from "../data/site";
+---
+
+{
+  testimonials.length > 0 && (
+    <section class="mx-auto max-w-5xl px-6 py-12" aria-labelledby="testimonials-title">
+      <h2 id="testimonials-title" class="eyebrow reveal">
+        Said about working with me
+      </h2>
+      <div class="mt-8 grid gap-6 md:grid-cols-2">
+        {testimonials.map((t) => (
+          <figure class="reveal relative flex flex-col rounded-2xl border border-border bg-surface p-7">
+            <span
+              class="absolute top-4 right-6 font-display text-6xl leading-none text-brass/25 select-none"
+              aria-hidden="true"
+            >
+              “
+            </span>
+            <blockquote class="relative mb-6 pr-10 leading-relaxed">
+              <p>{t.quote}</p>
+            </blockquote>
+            <figcaption class="mt-auto border-t border-border pt-4 text-sm">
+              {t.href ? (
+                <a href={t.href} class="font-medium transition-colors hover:text-brass" rel="noopener" target="_blank">
+                  {t.name}
+                </a>
+              ) : (
+                <span class="font-medium">{t.name}</span>
+              )}
+              <span class="block text-muted">{t.role}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  )
+}
