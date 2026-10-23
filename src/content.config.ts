@@ -13,6 +13,8 @@ const work = defineCollection({
     order: z.number(),
     summary: z.string(),
     stack: z.array(z.string()),
+    // Wireframe drawn on the card when there is no screenshot of the project
+    poster: z.enum(["dashboard", "charts", "document", "storefront", "mobile"]).optional(),
     teamSize: z.number().optional(),
     href: z.url().optional(),
     // Set to false while a case study is still being written

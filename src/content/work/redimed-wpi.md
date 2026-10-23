@@ -6,6 +6,7 @@ period: "May 2024 - Mar 2025"
 order: 7
 summary: "A Microsoft Word add-in that calculates impairment ratings inside the medical report being written, instead of beside it."
 stack: ["React", "Office Add-in", "TypeScript"]
+poster: "document"
 teamSize: 2
 ---
 

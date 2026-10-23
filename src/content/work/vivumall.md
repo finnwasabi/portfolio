@@ -6,6 +6,7 @@ period: "Aug 2022 - Apr 2023"
 order: 9
 summary: "A multi-vendor e-commerce marketplace where a single basket can hold items from several different shops."
 stack: ["React", "SEO", "Payments"]
+poster: "storefront"
 teamSize: 4
 ---
 
