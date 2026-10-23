@@ -341,6 +341,34 @@ body > footer {
   }
 }
 
+/* Moving between pages cross-fades, and the screenshot of the project being
+   opened morphs from its card into the case study cover (and back). The card
+   side gets its name from src/scripts/view-transitions.js, only for the one
+   card involved. Browsers without cross-document transitions navigate as before. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+.case-cover {
+  view-transition-name: cover;
+}
+/* The header is identical on every page, so it stays put rather than fading */
+.site-header {
+  view-transition-name: site-header;
+}
+html.vt-arrived .cover-frame {
+  animation: none;
+}
+::view-transition-group(cover) {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+}
+
 /* Filter chips need the script; without it they would be buttons that do nothing */
 html:not(.js) .work-filters {
   display: none;

@@ -10,6 +10,8 @@ import { site } from "../data/site";
 // the @font-face rules point at, so Vite emits each once under one hash.
 import unboundedLatin from "@fontsource-variable/unbounded/files/unbounded-latin-wght-normal.woff2?url";
 import interLatin from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
+// Emitted as a hashed file and loaded as a classic script; see the file for why
+import viewTransitions from "../scripts/view-transitions.js?url";
 
 interface Props {
   title?: string;
@@ -76,6 +78,8 @@ const preview = new URL(image, site.url).href;
     <link rel="preload" href={unboundedLatin} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
 
+    <script is:inline src={viewTransitions}></script>
+
     {/* CANH BAO: noi dung script nay duoc bam va ghim vao Content-Security-Policy
          trong Caddyfile tren may chu (khoi tungln.is-a.dev). Sua mot ky tu la ma bam
          doi, va trinh duyet se lang le tu choi chay no: giao dien sang toi thoi nho
@@ -128,7 +132,7 @@ const preview = new URL(image, site.url).href;
       >Skip to content</a
     >
 
-    <header class="sticky top-0 z-40 border-b border-border/60 bg-bg/80 backdrop-blur-md">
+    <header class="site-header sticky top-0 z-40 border-b border-border/60 bg-bg/80 backdrop-blur-md">
       <nav class="mx-auto flex h-16 max-w-5xl items-center justify-between px-6" aria-label="Main">
         <a href="/" class="font-display text-base font-bold tracking-tight hover:text-brass">
           LNT<span class="text-brass">.</span>
