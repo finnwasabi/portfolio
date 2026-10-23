@@ -264,6 +264,32 @@ body > footer {
   display: block;
 }
 
+/* The marquee under the hero. Kept here rather than in Marquee.astro: a component
+   style block becomes its own render-blocking stylesheet on the home page, since
+   inlineStylesheets is off for the CSP. */
+.marquee {
+  overflow: hidden;
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-slide 38s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee-slide {
+  to {
+    /* Half, because the track holds two copies of the list */
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
 /* Filter chips need the script; without it they would be buttons that do nothing */
 html:not(.js) .work-filters {
   display: none;
