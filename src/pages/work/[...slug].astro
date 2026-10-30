@@ -7,7 +7,10 @@ import { site } from "../../data/site";
 
 export async function getStaticPaths() {
   const work = await getCollection("work", ({ data }) => data.published);
-  const sorted = work.sort((a, b) => a.data.order - b.data.order);
+  // Same order as the home page: client work first, then personal projects
+  const sorted = work.sort(
+    (a, b) => Number(a.data.personal) - Number(b.data.personal) || a.data.order - b.data.order,
+  );
 
   return sorted.map((entry, i) => ({
     params: { slug: entry.id },

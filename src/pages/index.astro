@@ -10,9 +10,11 @@ import OpenSource from "../components/OpenSource.astro";
 import Testimonials from "../components/Testimonials.astro";
 import { site, focus, experience, education, homelab } from "../data/site";
 
-const work = (await getCollection("work", ({ data }) => data.published)).sort(
+const all = (await getCollection("work", ({ data }) => data.published)).sort(
   (a, b) => a.data.order - b.data.order,
 );
+const work = all.filter((entry) => !entry.data.personal);
+const personal = all.filter((entry) => entry.data.personal);
 
 // Filters are the stack tags shared by at least two projects, most used first.
 // A tag on one project would filter down to a single card, which a scroll does better.
@@ -82,6 +84,17 @@ const filters = [...tagCounts]
       {work.map((entry, i) => <WorkCard entry={entry} index={i} />)}
     </div>
   </section>
+
+  {
+    personal.length > 0 && (
+      <section id="personal" class="mx-auto max-w-5xl px-6 py-12">
+        <h2 class="eyebrow reveal">Personal projects</h2>
+        <div class="mt-8 grid gap-6 md:grid-cols-2">
+          {personal.map((entry, i) => <WorkCard entry={entry} index={i} />)}
+        </div>
+      </section>
+    )
+  }
 
   <OpenSource />
 
