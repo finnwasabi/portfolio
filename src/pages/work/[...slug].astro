@@ -180,7 +180,7 @@ const facts = [
             rel="noopener"
             class="reveal mt-8 inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm transition hover:border-brass hover:text-brass"
           >
-            Visit the site
+            {href.startsWith("https://github.com/") ? "View the code" : "Visit the site"}
             <span aria-hidden="true">↗</span>
           </a>
         )
