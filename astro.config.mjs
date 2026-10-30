@@ -11,6 +11,11 @@ import pageWeight from './integrations/page-weight.mjs';
 export default defineConfig({
   site: 'https://tungln.is-a.dev',
 
+  // The app was renamed; old links still land on its case study
+  redirects: {
+    '/work/ners-daily': '/work/medly/',
+  },
+
   build: {
     // Mac dinh Astro nhung script va CSS thang vao HTML khi chung nho. Tien cho toc do,
     // nhung khien Content-Security-Policy phai bam tung khoi, va bam doi moi lan sua

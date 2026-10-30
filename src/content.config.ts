@@ -17,6 +17,9 @@ const work = defineCollection({
     poster: z.enum(["dashboard", "charts", "document", "storefront", "mobile"]).optional(),
     teamSize: z.number().optional(),
     href: z.url().optional(),
+    // Personal projects get their own section on the home page, after client work,
+    // so the client timeline keeps its order
+    personal: z.boolean().default(false),
     // Optional extras for the case study page. Each block only renders when filled.
     // Results worth a number, shown as a strip under the cover: { value: "3 months", label: "to launch" }
     metrics: z.array(z.object({ value: z.string(), label: z.string() })).max(4).optional(),

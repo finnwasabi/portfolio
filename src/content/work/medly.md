@@ -1,14 +1,15 @@
 ---
-title: "Ner's Daily"
+title: "Medly"
 client: "Personal project"
 role: "Solo developer"
 period: "Oct 2026"
-order: 3
-summary: "An iOS medication reminder for someone who flies for work. The schedule stays on Vietnam time in any time zone, and real alarms ring through silent mode and Focus."
+order: 1
+personal: true
+summary: "An iOS medication reminder for people who fly for work. The schedule stays on Vietnam time in any time zone, and real alarms ring through silent mode and Focus."
 stack: ["Swift", "SwiftUI", "AlarmKit", "Node.js"]
-href: "https://github.com/finnwasabi/ners-daily"
+href: "https://github.com/finnwasabi/medly"
 metrics:
-  - { value: "76", label: "tests on the scheduling core" }
+  - { value: "88", label: "tests on the scheduling core" }
   - { value: "12,000", label: "random actions checked every run" }
   - { value: "0", label: "dependencies in the sync service" }
   - { value: "9 min", label: "snooze, like the iPhone Clock" }
@@ -16,7 +17,7 @@ decisions:
   - title: "Vietnam time, always"
     body: "Following the phone's time zone is the right default for almost every app and the wrong one here. Storing absolute moments keeps the gap between doses honest across any flight, and showing local time next to it keeps the screens readable."
   - title: "The rules live in a package"
-    body: "Scheduling is the part that must not break, so it sits in NersCore with no SwiftUI in sight. Its tests run in seconds without a simulator, and the app only draws what the planner decides."
+    body: "Scheduling is the part that must not break, so it sits in its own Swift package with no SwiftUI in sight. Its tests run in seconds without a simulator, and the app only draws what the planner decides."
   - title: "Test invariants, not examples"
     body: "Example tests cover the cases I thought of. The fuzz test covers the ones I did not: random actions, rules checked after each one, and a fixed seed so any failure can be replayed exactly."
   - title: "Offline first, sync optional"
@@ -25,11 +26,12 @@ decisions:
 
 ## The problem
 
-I built this for my partner, a flight attendant. Phone reminders assume you stay in one time
-zone. Set a daily alarm for 21:00, fly to Frankfurt, and the phone quietly moves it along, so
-the gap between two doses stretches or shrinks by however many hours the flight crossed. For a
-schedule where that gap has a hard ceiling, the drift is the bug. Ordinary reminders also lose
-to silent mode and Focus, which is how a phone spends most of a working day in the air.
+I made this for my girlfriend, a flight attendant, and kept it open for anyone to use. Phone
+reminders assume you stay in one time zone. Set a daily alarm for 21:00, fly to Frankfurt, and
+the phone quietly moves it along, so the gap between two doses stretches or shrinks by however
+many hours the flight crossed. For a schedule where that gap has a hard ceiling, the drift is the
+bug. Ordinary reminders also lose to silent mode and Focus, which is how a phone spends most of a
+working day in the air.
 
 ## What I did
 
@@ -49,11 +51,11 @@ share one alarm. It counts pills by pack size and asks for a refill when a pack 
 fully offline, and comes in Vietnamese and English, light and dark, in a cute neubrutalist look
 of pastel fills, ink outlines and hard shadows. No name is hard-coded, so anyone can install it.
 
-All the scheduling logic sits in NersCore, a pure-Swift package with 76 tests. The ones I trust
-most do not check examples. A seeded fuzz test drives 300 random schedules through 40 random
-actions each (taking, undoing, editing times, pausing, making up, changing the schedule) and
-checks the invariants after every step, the main one being that two ringing alarms are never
-further apart than the maximum gap.
+All the scheduling logic sits in a pure-Swift package with 88 tests. The ones I trust most do not
+check examples. A seeded fuzz test drives 300 random schedules through 40 random actions each
+(taking, skipping, undoing, editing times, pausing, making up, changing the schedule) and checks the
+invariants after every step, the main one being that two ringing alarms are never further apart
+than the maximum gap.
 
 When the phone is online, it sends a snapshot of its state to a single-file Node service with no
 dependencies, running in Docker behind Caddy on my own server. The same service runs a private
@@ -73,3 +75,7 @@ releases shipped from an outdated commit.
 A reminder that keeps one clock wherever the roster goes, and rings when it says it will. The
 project is open source under MIT, with the scheduling rules written down in a spec next to the
 code.
+
+Version 0.3.0 added backup and restore to a file, skipping a dose on purpose, days off in a cycle,
+home and lock screen widgets, a Siri Shortcut, and a nudge from the bot when a deadline passes with
+no dose reported.
