@@ -3,7 +3,7 @@ title: "Multibank Info"
 client: "Netherlands"
 role: "Front-end Developer"
 period: "Mar 2024 - Mar 2025"
-order: 5
+order: 6
 summary: "One dashboard for money spread across several banks: balances, transactions and investment plans, updating live."
 stack: ["React", "TypeScript", "Charts"]
 poster: "charts"

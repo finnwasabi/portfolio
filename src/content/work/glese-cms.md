@@ -3,7 +3,7 @@ title: "Glese CMS"
 client: "Vietnam"
 role: "Front-end Developer"
 period: "May 2024 - Mar 2025"
-order: 4
+order: 5
 summary: "The admin side of Bookese: accommodations, guests, bookings and revenue, in an interface the operations team runs without a developer."
 stack: ["React", "Vite", "Tailwind CSS", "shadcn/ui"]
 poster: "dashboard"
