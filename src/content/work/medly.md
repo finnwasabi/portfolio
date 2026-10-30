@@ -9,7 +9,7 @@ summary: "An iOS medication reminder for people who fly for work. The schedule s
 stack: ["Swift", "SwiftUI", "AlarmKit", "Node.js"]
 href: "https://github.com/finnwasabi/medly"
 metrics:
-  - { value: "76", label: "tests on the scheduling core" }
+  - { value: "88", label: "tests on the scheduling core" }
   - { value: "12,000", label: "random actions checked every run" }
   - { value: "0", label: "dependencies in the sync service" }
   - { value: "9 min", label: "snooze, like the iPhone Clock" }
@@ -51,9 +51,9 @@ share one alarm. It counts pills by pack size and asks for a refill when a pack 
 fully offline, and comes in Vietnamese and English, light and dark, in a cute neubrutalist look
 of pastel fills, ink outlines and hard shadows. No name is hard-coded, so anyone can install it.
 
-All the scheduling logic sits in a pure-Swift package with 76 tests. The ones I trust most do not
+All the scheduling logic sits in a pure-Swift package with 88 tests. The ones I trust most do not
 check examples. A seeded fuzz test drives 300 random schedules through 40 random actions each
-(taking, undoing, editing times, pausing, making up, changing the schedule) and checks the
+(taking, skipping, undoing, editing times, pausing, making up, changing the schedule) and checks the
 invariants after every step, the main one being that two ringing alarms are never further apart
 than the maximum gap.
 
@@ -76,6 +76,6 @@ A reminder that keeps one clock wherever the roster goes, and rings when it says
 project is open source under MIT, with the scheduling rules written down in a spec next to the
 code.
 
-Version 0.3.0 is on the way, with backup and restore, skipping a dose, on and off cycles, a home
-and lock screen widget, a Siri Shortcut, and a nudge from the bot to the partner when a deadline
-passes with no dose reported.
+Version 0.3.0 added backup and restore to a file, skipping a dose on purpose, days off in a cycle,
+home and lock screen widgets, a Siri Shortcut, and a nudge from the bot when a deadline passes with
+no dose reported.
