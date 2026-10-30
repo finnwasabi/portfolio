@@ -1,5 +1,5 @@
 ---
-title: "Medly"
+title: "Pillot"
 client: "Personal project"
 role: "Solo developer"
 period: "Oct 2026"
@@ -7,9 +7,9 @@ order: 1
 personal: true
 summary: "An iOS medication reminder for people who fly for work. The schedule stays on Vietnam time in any time zone, and real alarms ring through silent mode and Focus."
 stack: ["Swift", "SwiftUI", "AlarmKit", "Node.js"]
-href: "https://github.com/finnwasabi/medly"
+href: "https://github.com/finnwasabi/pillot"
 metrics:
-  - { value: "88", label: "tests on the scheduling core" }
+  - { value: "89", label: "tests on the scheduling core" }
   - { value: "12,000", label: "random actions checked every run" }
   - { value: "0", label: "dependencies in the sync service" }
   - { value: "9 min", label: "snooze, like the iPhone Clock" }
@@ -51,7 +51,7 @@ share one alarm. It counts pills by pack size and asks for a refill when a pack 
 fully offline, and comes in Vietnamese and English, light and dark, in a cute neubrutalist look
 of pastel fills, ink outlines and hard shadows. No name is hard-coded, so anyone can install it.
 
-All the scheduling logic sits in a pure-Swift package with 88 tests. The ones I trust most do not
+All the scheduling logic sits in a pure-Swift package with 89 tests. The ones I trust most do not
 check examples. A seeded fuzz test drives 300 random schedules through 40 random actions each
 (taking, skipping, undoing, editing times, pausing, making up, changing the schedule) and checks the
 invariants after every step, the main one being that two ringing alarms are never further apart

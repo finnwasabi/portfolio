@@ -13,7 +13,8 @@ export default defineConfig({
 
   // The app was renamed; old links still land on its case study
   redirects: {
-    '/work/ners-daily': '/work/medly/',
+    '/work/ners-daily': '/work/pillot/',
+    '/work/medly': '/work/pillot/',
   },
 
   build: {
