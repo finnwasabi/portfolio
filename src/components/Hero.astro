@@ -1,13 +1,14 @@
 ---
-import { site, skills } from "../data/site";
+import { site, skills, retainer, packages } from "../data/site";
+import { npmTotal } from "../data/npm";
 
 // Shown while nothing is hovered.
 const specs: [string, string][] = [
-  ["Role", "Front-end"],
-  ["Based", "Ho Chi Minh City"],
+  ["Role", "Frontend & Strapi"],
+  ["Based", "HCMC, UTC+7"],
   ["Since", "2022"],
   ["Core", skills.slice(0, 3).map((s) => s.name).join(", ")],
-  ["Reply", "Within a day"],
+  ["Reply", "1 business day"],
 ];
 
 // Each layer carries four fixed properties; the panel appends measured size as
@@ -70,9 +71,9 @@ const layerProps = (pairs: [string, string][]) =>
           ["Case", "Uppercase"],
         ])}
       >
-        <span>{site.role}</span>
+        <span class="text-brass">{retainer.availability}</span>
         <span aria-hidden="true" class="hidden sm:inline">·</span>
-        <span>{site.location}</span>
+        <span>Ho Chi Minh City, UTC+7</span>
       </p>
 
       {/* The name keeps the full 976px so it stays on one line, and it never
@@ -97,7 +98,20 @@ const layerProps = (pairs: [string, string][]) =>
         {/* Right padding is the panel's column, kept clear from lg up */}
         <div class="lg:pr-[17rem]">
           <p
-            class="rise mt-8 text-lg leading-relaxed text-muted"
+            class="rise mt-6 font-display text-xl leading-snug font-bold tracking-tight sm:text-2xl"
+            style="animation-delay: 250ms"
+            data-layer="Headline"
+            data-props={layerProps([
+              ["Font", "Unbounded"],
+              ["Weight", "700"],
+              ["Size", "24px"],
+              ["Leading", "1.375"],
+            ])}
+          >
+            {site.headline}
+          </p>
+          <p
+            class="rise mt-5 text-lg leading-relaxed text-muted"
             style="animation-delay: 300ms"
             data-layer="Intro"
             data-props={layerProps([
@@ -112,31 +126,31 @@ const layerProps = (pairs: [string, string][]) =>
 
           <div class="rise mt-9 flex flex-wrap items-center gap-3" style="animation-delay: 380ms">
             <a
-              href="#work"
+              href="#work-with-me"
               class="group inline-flex items-center gap-2 rounded-full bg-brass px-5 py-2.5 text-sm font-medium text-bg transition hover:bg-brass-bright"
               data-layer="Button / Primary"
               data-props={layerProps([
                 ["Fill", "Brass"],
                 ["Radius", "Full"],
                 ["Label", "14px"],
-                ["Action", "Scroll to work"],
+                ["Action", "Scroll to plans"],
               ])}
             >
-              See the work
+              Work with me
               <span class="transition-transform group-hover:translate-y-0.5" aria-hidden="true">↓</span>
             </a>
             <a
-              href={`mailto:${site.email}`}
+              href="#case-studies"
               class="rounded-full border border-border px-5 py-2.5 text-sm font-medium transition hover:border-brass hover:text-brass"
               data-layer="Button / Secondary"
               data-props={layerProps([
                 ["Stroke", "1px border"],
                 ["Radius", "Full"],
                 ["Label", "14px"],
-                ["Action", "Open mail"],
+                ["Action", "Scroll to case studies"],
               ])}
             >
-              Get in touch
+              See the work
             </a>
             {
               site.cv && (
@@ -151,6 +165,28 @@ const layerProps = (pairs: [string, string][]) =>
               )
             }
           </div>
+
+          {/* The Strapi proof, counted from npm at build time like the open source
+               section further down. Without a number it still names the plugins. */}
+          <a
+            href="#open-source"
+            class="rise mt-7 inline-flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm text-muted transition-colors hover:text-text"
+            style="animation-delay: 420ms"
+          >
+            <span class="font-display font-bold text-brass tabular-nums">{packages.length}</span>
+            open-source Strapi plugins on npm
+            {
+              npmTotal > 0 && (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span class="font-display font-bold text-brass tabular-nums">
+                    {new Intl.NumberFormat("en-GB").format(npmTotal)}
+                  </span>
+                  downloads last month
+                </>
+              )
+            }
+          </a>
         </div>
 
         {/* The counterpart to the layer inspector: sits vertically centred on

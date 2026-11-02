@@ -1,32 +1,13 @@
 ---
-import { packages } from "../data/site";
+import { npmPackages as list, npmTotal as total } from "../data/npm";
 
-// npm is asked once per package at build time. If it is unreachable the section
-// still renders, just without the number: a missing figure beats a failed build.
-async function downloads(pkg: string): Promise<number | null> {
-  const url = `https://api.npmjs.org/downloads/point/last-month/@tunghtml%2Fstrapi-plugin-${pkg}`;
-  try {
-    const r = await fetch(url, { signal: AbortSignal.timeout(8000) });
-    if (!r.ok) return null;
-    const j = await r.json();
-    return typeof j.downloads === "number" ? j.downloads : null;
-  } catch {
-    return null;
-  }
-}
-
-const list = await Promise.all(
-  packages.map(async (p) => ({ ...p, downloads: await downloads(p.name) })),
-);
-
-const total = list.reduce((sum, p) => sum + (p.downloads ?? 0), 0);
 const fmt = new Intl.NumberFormat("en-GB");
 ---
 
 <section id="open-source" class="mx-auto max-w-5xl px-6 py-20">
   <div class="reveal flex flex-wrap items-baseline justify-between gap-2">
     <h2 class="eyebrow">Open source</h2>
-    {total > 0 && <span class="eyebrow">{fmt.format(total)} installs a month</span>}
+    {total > 0 && <span class="eyebrow">{fmt.format(total)} downloads last month</span>}
   </div>
 
   <p class="reveal mt-6 leading-relaxed text-muted">
