@@ -1,7 +1,7 @@
 ---
 import "../styles/global.css";
 import Colophon from "../components/Colophon.astro";
-import { site } from "../data/site";
+import { site, retainer } from "../data/site";
 // The browser only finds a font once the stylesheet is parsed, so the first paint
 // waited on two round trips in a row. Preloading the two faces every page shows
 // above the fold (headings, body) starts them alongside the stylesheet. Latin only:
@@ -28,15 +28,17 @@ interface Props {
 const {
   title,
   description = site.metaDescription,
-  image = "/og.png",
+  image = "/og/site.jpg",
   type = "website",
   noindex = false,
 } = Astro.props;
-const pageTitle = title ? `${title} - ${site.name}` : `${site.name} - ${site.role}`;
+const pageTitle = title ? `${title} - ${site.name}` : `${site.name} - ${site.headline}`;
 const nav = [
+  { id: "work-with-me", label: "Work with me" },
   { id: "work", label: "Work" },
-  { id: "about", label: "About" },
-  { id: "contact", label: "Contact" },
+  // Only from sm up: four links do not fit beside the logo on a 320px screen
+  { id: "about", label: "About", wide: true },
+  { id: "contact", label: "Contact", wide: true },
 ];
 
 const canonical = new URL(Astro.url.pathname, site.url).href;
@@ -100,15 +102,49 @@ const preview = new URL(image, site.url).href;
       type="application/ld+json"
       set:html={JSON.stringify({
         "@context": "https://schema.org",
-        "@type": "Person",
-        name: site.name,
-        url: site.url,
-        image: preview,
-        jobTitle: site.role,
-        email: `mailto:${site.email}`,
-        address: { "@type": "PostalAddress", addressLocality: "Ho Chi Minh City", addressCountry: "VN" },
-        sameAs: site.socials.map((s) => s.href),
-        knowsAbout: ["Front-end development", "React", "Next.js", "Design systems", "Web performance"],
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": `${site.url}/#person`,
+            name: site.name,
+            url: site.url,
+            image: preview,
+            jobTitle: site.role,
+            email: `mailto:${site.email}`,
+            address: { "@type": "PostalAddress", addressLocality: "Ho Chi Minh City", addressCountry: "VN" },
+            sameAs: site.socials.map((s) => s.href),
+            knowsAbout: ["Front-end development", "React", "Next.js", "Strapi", "Design systems", "Web performance"],
+          },
+          {
+            "@type": "ProfessionalService",
+            "@id": `${site.url}/#service`,
+            name: `${site.name}, ${site.headline}`,
+            url: `${site.url}/#work-with-me`,
+            image: preview,
+            email: `mailto:${site.email}`,
+            founder: { "@id": `${site.url}/#person` },
+            address: { "@type": "PostalAddress", addressLocality: "Ho Chi Minh City", addressCountry: "VN" },
+            areaServed: "Worldwide",
+            hasOfferCatalog: {
+              "@type": "OfferCatalog",
+              name: "Monthly retainers",
+              itemListElement: retainer.plans.map((plan) => ({
+                "@type": "Offer",
+                name: `${plan.hours} hours a month`,
+                description: retainer.included.join(". "),
+                price: plan.price,
+                priceCurrency: "USD",
+                priceSpecification: {
+                  "@type": "UnitPriceSpecification",
+                  price: plan.price,
+                  priceCurrency: "USD",
+                  unitCode: "MON",
+                  referenceQuantity: { "@type": "QuantitativeValue", value: 1, unitCode: "MON" },
+                },
+              })),
+            },
+          },
+        ],
       })}
     />
 
@@ -153,16 +189,20 @@ const preview = new URL(image, site.url).href;
           }
         </div>
 
-        {/* Three links fit on a 320px screen with the gap tightened, so they all
-             stay visible. A hamburger would hide the whole nav behind a tap to
-             save room that is not needed. */}
+        {/* Two links fit on a 320px screen with the gap tightened, four from sm up.
+             A hamburger would hide the whole nav behind a tap to save room that is
+             not needed: About and Contact are a scroll away, and the retainer
+             section carries the contact link anyway. */}
         <div class="flex items-center gap-4 text-sm sm:gap-6">
           {
             nav.map((n) => (
               <a
                 href={`/#${n.id}`}
                 data-nav={n.id}
-                class="text-muted transition-colors hover:text-text aria-[current=true]:text-brass"
+                class:list={[
+                  "whitespace-nowrap text-muted transition-colors hover:text-text aria-[current=true]:text-brass",
+                  n.wide && "hidden sm:inline",
+                ]}
               >
                 {n.label}
               </a>

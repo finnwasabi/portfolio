@@ -2,7 +2,9 @@
 
 export const site = {
   name: "Le Nhat Tung",
-  role: "Front-end Developer",
+  role: "Frontend & Strapi plugin developer",
+  // The positioning line under the name, and the home page title
+  headline: "Frontend & Strapi plugin developer for monthly retainers",
   location: "Ho Chi Minh City, Vietnam",
   url: "https://tungln.is-a.dev",
   // Phone number and date of birth are deliberately left out: a public page is
@@ -15,7 +17,7 @@ export const site = {
   ],
   // Search results cut off around 155 characters; the long intro is for the page itself
   metaDescription:
-    "Front-end developer in Ho Chi Minh City. Four years building production interfaces with React, Next.js and Refine, plus seven Strapi plugins on npm.",
+    "Frontend and Strapi plugin developer on monthly retainer. React, Next.js and seven open-source Strapi plugins. Ho Chi Minh City, UTC+7.",
   // Flip `open` to show an "Open to work" badge in the header; `label` is what it says.
   availability: { open: false, label: "Open to work" },
   // Drop a PDF in public/ and set its path (e.g. "/le-nhat-tung-cv.pdf") to show a
@@ -160,7 +162,70 @@ export const education = [
   },
 ];
 
+// Monthly retainers, the "Work with me" section and the JSON-LD offers both read
+// from here. Prices in USD, billed at the start of the month.
+export const retainer = {
+  plans: [
+    { hours: 20, price: 800 },
+    { hours: 40, price: 1500 },
+    { hours: 80, price: 2800 },
+  ],
+  included: [
+    "Frontend work: React and Next.js, Figma to code, design systems in Storybook, performance and SEO",
+    "Strapi plugin development and CMS integration",
+    "A reply within 1 business day",
+    "A written progress note every week",
+  ],
+  terms: [
+    "3-month minimum, then 30 days' notice to stop.",
+    "Unused hours roll over for one month, up to 10 hours.",
+    "Extra work is billed at the same hourly rate as your plan.",
+    "Billed in USD at the start of each month.",
+  ],
+  availability: "Open for new retainer clients",
+  timezone:
+    "Based in Ho Chi Minh City (UTC+7), good overlap with Australia and Europe mornings",
+  inquiry: {
+    subject: "Retainer inquiry",
+    body: "Hi Tung,\n\nTeam size:\nStack:\nHours per month (20, 40 or 80):\n\nWhat we are working on:\n",
+  },
+};
+
+// The three case studies summarised on the home page. Every line here restates
+// something the full case study already says; no new claims, no new numbers.
+export const highlights = [
+  {
+    slug: "emerging-vietnam",
+    context: "International investment conference",
+    problem:
+      "Hundreds of fund managers and listed companies register, then need a grid of one-to-one meetings where nobody is in two rooms at once, and a check-in that clears before the first session.",
+    did: "Built the registration journeys, accounts, agenda and scannable tickets, then rebuilt the meeting-matching engine on direct SQL with batched writes after the first version exhausted the database connection pool. The platform runs on five of my own Strapi plugins.",
+    result:
+      "Slot assignment that used to block the public site now finishes in one pass. The organisers run registration, matching and check-in from the admin panel without a developer on standby.",
+  },
+  {
+    slug: "multibank-info",
+    context: "Banking dashboard, Netherlands",
+    problem:
+      "Someone with accounts at five banks has five logins and no single view of what they own.",
+    did: "Built the React and TypeScript dashboard: live charts, linking several bank accounts, balances, investment plans and transaction history, consolidated or per account. Typed end to end, because every number on that screen is someone's money.",
+    result:
+      "No headline metric. The dashboard became the piece all six people on the team built against, sharing one set of types.",
+  },
+  {
+    slug: "bookese",
+    context: "Accommodation booking platform",
+    problem:
+      "A guest's dates and budget have to survive every screen while availability changes underneath, or they lose their search halfway through checkout.",
+    did: "Built the interface from Figma and wired it to the back end: accounts, room availability, reviews, and a third-party payment step that survives a closed tab, a double payment or a stale price.",
+    result:
+      "Not measured in numbers. The booking flow is still in production and still growing, and eight people could work on it at once.",
+  },
+];
+
 // What colleagues and clients have said. Real quotes only, with permission, and
 // the section stays off the page until there is at least one. Keep each to two
 // or three sentences; `href` can point at the person's LinkedIn.
+// TODO(testimonials): add real quotes here once a client agrees to be quoted.
+// The section renders on its own as soon as this array is not empty.
 export const testimonials: { quote: string; name: string; role: string; href?: string }[] = [];
