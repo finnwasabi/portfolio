@@ -19,7 +19,7 @@ export const site = {
   metaDescription:
     "Frontend and Strapi plugin developer on monthly retainer. React, Next.js and seven open-source Strapi plugins. Ho Chi Minh City, UTC+7.",
   // Flip `open` to show an "Open to work" badge in the header; `label` is what it says.
-  availability: { open: false, label: "Open to work" },
+  availability: { open: true, label: "Open to work" },
   // Drop a PDF in public/ and set its path (e.g. "/le-nhat-tung-cv.pdf") to show a
   // download button in the hero and the contact card. Empty hides both.
   cv: "",
